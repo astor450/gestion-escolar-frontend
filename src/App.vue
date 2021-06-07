@@ -1,26 +1,23 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <nav class="white">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="@/assets/logo_colegio.png" alt=""  height="60" class="d-inline-block align-text-middle" />
+      </a>
+    </div>
+  </nav>
+  <router-view />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+import M from "materialize-css"
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-  },
+  mounted () {  M.AutoInit() },
 };
 </script>
-
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#app{
+  min-height: 100hv !important;
 }
 </style>
