@@ -5,17 +5,17 @@
       <h4 class="mt-5">Aspirantes de El colegio de Morelos</h4>
       <div class="row">
         <div class="input-field col s12">
-          <input id="curp" name="curp" type="text" class="validate">
+          <input v-model="curp" type="text" class="validate">
           <label for="curp">CURP (18 dígitos)</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input id="clave" type="password" class="validate">
+          <input v-model="clave" type="password" class="validate">
           <label for="clave">Contraseña</label>
         </div>
       </div>
-      <button class="w-100 btn btn-lg btn-primary waves-effect" type="submit">Iniciar sesión</button>
+      <button class="w-100 btn btn-lg btn-primary waves-effect" @click.prevent="iniciarSesion">Iniciar sesión</button>
       <div class="card-action">
         <a href="#">Olvidé mi contraseña</a>
         <router-link to="registro">Registrarme</router-link>
@@ -26,7 +26,69 @@
 </template>
 
 <script>
-export default {};
+import M from "materialize-css"
+import {api_url, curpValida, store} from '../main'
+import router from "../router/index"
+
+export default {
+  mounted() {
+    this.check_login()
+  },
+  methods: {
+    check_login() {
+      if(store.state.user.token != "" && localStorage.getItem('token') != null){
+        router.push('/aspirante')
+      }
+    },
+    async iniciarSesion() {
+      try {
+        if(!curpValida(this.curp)){
+          throw 'CURP inválida'
+        }
+        if(this.clave.trim().length == 0){
+          throw 'Debe escribir una clave'
+        }
+        await fetch(api_url + '/aspirante/login', {
+          body: JSON.stringify({
+            curp: this.curp,
+            clave: this.clave
+          }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then((req) => {
+          req.json().then((response) => {
+            if(response.status != 'success'){
+              M.toast({ html: response.message, classes: 'red darken-2' })
+            } else {
+              M.toast({ html: response.message, classes: 'green darken-2' })
+              store.commit('login', response.token)
+              let aspirante = {
+                curp: response.curp,
+                uid: response.uid
+              }
+              store.commit('setAspiranteInfo', aspirante)
+              if(store.state.user.token != ""){
+                this.logged_in = true
+                location.reload()
+              }
+            }
+          })
+        })
+      } catch (error) {
+        M.toast({ html: error, classes: 'red darken-2' })
+        return false
+      }
+    }
+  },
+  data() {
+    return {
+      curp: '',
+      clave: ''
+    }
+  }
+};
 </script>
 
 <style>
