@@ -19,6 +19,18 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "HomeAspirante" */ "../Aspirante/Index.vue"),
   },
+  {
+    path: "/administracion/alumnos",
+    name: "AdmonAlumnos",
+    component: () =>
+      import(/* webpackChunkName: "HomeAspirante" */ "../Administracion/Alumnos/Index.vue")
+  },
+  {
+    path: "/administracion/login",
+    name: "AdmonLogin",
+    component: () =>
+      import(/* webpackChunkName: "HomeAspirante" */ "../Administracion/Login.vue")
+  },
 ];
 
 const router = createRouter({

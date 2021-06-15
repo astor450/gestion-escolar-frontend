@@ -33,7 +33,6 @@ export default {
     islogged(){
       if(this.logged_in){
         var dropdowns = this.$refs.sessionButton
-        console.log(dropdowns)
         M.Dropdown.init(dropdowns, { closeOnClick: true })
       }
     },
