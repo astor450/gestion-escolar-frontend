@@ -23,14 +23,26 @@ const routes = [
     path: "/administracion/alumnos",
     name: "AdmonAlumnos",
     component: () =>
-      import(/* webpackChunkName: "HomeAspirante" */ "../Administracion/Alumnos/Index.vue")
+      import(/* webpackChunkName: "AlumnosAdministracion" */ "../Administracion/Alumnos/Index.vue")
   },
   {
     path: "/administracion/login",
     name: "AdmonLogin",
     component: () =>
-      import(/* webpackChunkName: "HomeAspirante" */ "../Administracion/Login.vue")
+      import(/* webpackChunkName: "LoginAdministracion" */ "../Administracion/Login.vue")
   },
+  {
+    path: "/administracion/",
+    name: "AdmonIndex",
+    component: () =>
+      import(/* webpackChunkName: "HomeAdministracion" */ "../Administracion/Index.vue")
+  },
+  {
+    path: "/administracion/alumnos/",
+    name:"ListaAlumnos",
+    component: () =>
+      import(/* webpackChunkName: "ListadoAlumnos" */ "../Administracion/Alumnos/Index.vue")
+  }
 ];
 
 const router = createRouter({
