@@ -45,11 +45,11 @@
                         <label>Estatus</label>
                     </div>
                     <div class="col s12 m3 input-field">
-                        <input type="text" @change="validarPeriodo('periodoIngreso')" ref="periodoIngreso" v-model="alumno.periodo_ingreso" id="periodo_ingreso"/>
+                        <input type="text" @change="validarPeriodo('periodoIngreso')" ref="periodoIngreso" v-model="alumno.periodoIngreso" id="periodo_ingreso"/>
                         <label for="periodo_ingreso">Periodo de Ingreso</label>
                     </div>
                     <div class="col s12 m3 input-field">
-                        <input type="text" @change="validarPeriodo('periodoEgreso')" ref="periodoEgreso" v-model="alumno.periodo_egreso" id="periodo_egreso"/>
+                        <input type="text" @change="validarPeriodo('periodoEgreso')" ref="periodoEgreso" v-model="alumno.periodoEgreso" id="periodo_egreso"/>
                         <label for="periodo_egreso">Periodo de Egreso</label>
                     </div>
                 </div>
@@ -144,10 +144,9 @@ export default {
         async iniciarRegistro(){
             const resultado_validacion = validate(this.alumno, this.validarAlumno)
             if(!(resultado_validacion == undefined)){
-                for(const regla in Object.values(resultado_validacion)){
-                    console.log(regla)
-                    M.toast({ html: regla, classes: 'red darken-2' })
-                }
+                Object.values(resultado_validacion).forEach(regla => {
+                    M.toast({ html: regla, classes: 'orange darken-2' })
+                })
             }
         }
     },
