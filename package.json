@@ -16,6 +16,7 @@
     "materialize-css": "^1.0.0-rc.2",
     "mongodb": "^3.6.9",
     "sweetalert2": "^11.0.16",
+    "validate.js": "^0.13.1",
     "vue": "^3.0.11",
     "vue-router": "^4.0.8",
     "vuex": "^4.0.1",

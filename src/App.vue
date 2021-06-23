@@ -70,8 +70,8 @@ export default {
 .text-center{
   text-align: center!important;
 }
-body{
-  background-color: #fefefe;
+body, html, #app{
+  background-color: #f5f5f5;
 }
 .container{
   background-color: #ffffff;
