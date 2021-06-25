@@ -81,6 +81,7 @@
                             <th>Segundo Apellido</th>
                             <th>CURP</th>
                             <th>Correo</th>
+                            <th>Estatus</th>
                         </thead>
                         <tbody>
                             <tr v-for="aspirante in aspirantes" v-bind:key="aspirante._id">
@@ -94,6 +95,7 @@
                                 <td>{{ aspirante.segundo_apellido }}</td>
                                 <td>{{ aspirante.curp }}</td>
                                 <td>{{ aspirante.email }}</td>
+                                <td>{{ aspirante.status_aspirante }}</td>
                             </tr>
                         </tbody>
                     </table>

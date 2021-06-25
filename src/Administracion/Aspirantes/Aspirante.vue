@@ -12,6 +12,157 @@
                 </div>
             </nav>
         </div>
+        <div class="row">
+            <div class="col s12 m12 text-center">
+                <div class="card-title flow-text">Datos Generales</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2">
+                <img src="@/assets/user_placeholder.png" style="width:100%;" :title="aspirante.nombre"/>
+            </div>
+            <div class="col s12 m10" v-show="!isLoading">
+                <div class="row">
+                    <div class="col s12 m6">
+                        <strong>Programa:</strong> 
+                        <br/>
+                        {{ aspirante.programa_escolar }}
+                    </div>
+                    <div class="col s12 m6">
+                        <strong>Estatus:</strong> 
+                        <br/>
+                        {{ aspirante.status }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m3">
+                        <strong>CURP:</strong> 
+                        <br/>
+                        {{ aspirante.curp }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Nombre:</strong> 
+                        <br/>
+                        {{ aspirante.nombre }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Primer Apellido:</strong> 
+                        <br/>
+                        {{ aspirante.primer_apellido }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Segundo Apellido:</strong>
+                        <br/>
+                        {{ aspirante.segundo_apellido }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m3">
+                        <strong>Fecha de Nacimiento:</strong> 
+                        <br/>
+                        {{ aspirante.fecha_nacimiento }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Nacionalidad:</strong> 
+                        <br/>
+                        {{ aspirante.nacionaliad }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Sexo:</strong> 
+                        <br/>
+                        {{ aspirante.genero }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Estado de Nacimiento:</strong> 
+                        <br/>
+                        {{ aspirante.estado_nacimiento }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col s12 m12 text-center">
+                <div class="card-title flow-text">Datos de Contacto</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m12">
+                <div class="row">
+                    <div class="col s12 m3">
+                        <strong>Email:</strong>
+                        <br/>
+                        {{ aspirante.email }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4">
+                        <strong>Teléfono Celular:</strong>
+                        <br />
+                        {{ aspirante.telefono_celular }}
+                    </div>
+                    <div class="col s12 m4">
+                        <strong>Teléfono Fijo:</strong>
+                        <br />
+                        {{ aspirante.telefono_fijo }}
+                    </div>
+                    <div class="col s12 m3">
+                        <strong>Teléfono Otro:</strong>
+                        <br />
+                        {{ aspirante.telefono_otro }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col s12 m12 text-center">
+                <div class="card-title flow-text">Domicilio</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m12">
+                <div class="row">
+                    <div class="col s12 m8">
+                        <strong>Calle:</strong>
+                        <br/>
+                        {{ aspirante.calle }}
+                    </div>
+                    <div class="col s12 m2">
+                        <strong>Número Exterior:</strong>
+                        <br/>
+                        {{ aspirante.numero }}
+                    </div>
+                    <div class="col s12 m2">
+                        <strong>Número Interior:</strong>
+                        <br/>
+                        {{ aspirante.interior }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4">
+                        <strong>Código Postal:</strong>
+                        <br/>
+                        {{ aspirante.cp }}
+                    </div>
+                    <div class="col s12 m4">
+                        <strong>Estado:</strong>
+                        <br/>
+                        {{ aspirante.estado }}
+                    </div>
+                    <div class="col s12 m4">
+                        <strong>Municipico:</strong>
+                        <br/>
+                        {{ aspirante.municipio }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -58,6 +209,7 @@ export default {
                     }
 
                     this.aspirante = response.aspirante
+                    this.aspirante.fecha_nacimiento = new Date(this.aspirante.fecha_nacimiento).toLocaleDateString()
                 })
             }).finally(() => { this.isLoading = false })
         }
