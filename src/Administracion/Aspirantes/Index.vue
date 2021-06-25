@@ -5,19 +5,10 @@
                 <div class="nav-wrapper blue-colegio">
                     <div class="col s12">
                         <router-link to="/administracion" class="breadcrumb">Administración</router-link>
-                        <router-link to="/administracion/alumnos" class="breadcrumb">Alumnos</router-link>
+                        <router-link to="/administracion/aspirantes" class="breadcrumb">Aspirantes</router-link>
                     </div>
                 </div>
             </nav>
-            <div class="col offset-m9 offset-l10 l2 m3 s12 mt-2" style="margin-bottom:0.5em;">
-                <router-link
-                    to="/administracion/nuevo-alumno"
-                    data-position="bottom" 
-                    data-tooltip="Al dar clic aquí, será redirigido a otra ventana para agregar un nuevo alumno" 
-                    class="btn btn-medium waves-effect waves-light blue-colegio tooltipped">
-                        <i class="material-icons left">add</i>Nuevo Alumno
-                </router-link>
-            </div>
         </div>
         
         <div class="row" style="margin-left:2em; margin-right:2em;">
@@ -77,23 +68,32 @@
             </form>
         </div>
     </div>
-    <div class="container z-depth-1 mt-4">
+    <div class="container-fluid z-depth-1 mt-4" style="background-color:white;">
+        <Preloader v-if="isLoading" />
         <div class="row">
-            <div class="m12 s12 text-center">
-                <div style="margin-left:2em; margin-right:2em;">
+            <div class="m12 s12 text-center mt-3">
+                <div style="margin-left:2em; margin-right:2em;" class="">
                     <table class="striped responsive-table highlight">
                         <thead>
-                            <th>#</th>
-                            <th>Matrícula</th>
+                            <th>Acción</th>
                             <th>Nombre</th>
                             <th>Primer Apellido</th>
                             <th>Segundo Apellido</th>
+                            <th>CURP</th>
                             <th>Correo</th>
-                            <th>Incrito desde</th>
                         </thead>
                         <tbody>
-                            <tr v-for="alumno in alumnos" v-bind:key="alumno._id">
-
+                            <tr v-for="aspirante in aspirantes" v-bind:key="aspirante._id">
+                                <td>
+                                    <router-link :to="'/administracion/aspirante/' + aspirante._id " class="btn-small btn-flat waves-effect">
+                                        <i class="material-icons left">remove_red_eye</i> Ver
+                                    </router-link>
+                                </td>
+                                <td>{{ aspirante.nombre }}</td>
+                                <td>{{ aspirante.primer_apellido }}</td>
+                                <td>{{ aspirante.segundo_apellido }}</td>
+                                <td>{{ aspirante.curp }}</td>
+                                <td>{{ aspirante.email }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,12 +111,16 @@
 import router from "../../router/index"
 import { api_url, store } from "../../main"
 import M from 'materialize-css'
+import Preloader from '../../components/Preloader.vue'
 
 export default {
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
-        this.obtenerListadoAlumnos()
+        this.obtenerListadoAspirantes()
+    },
+    components:{
+        Preloader
     },
     methods: {
         check_login(){
@@ -125,8 +129,9 @@ export default {
             }
             this.uname = store.state.user.name
         },
-        async obtenerListadoAlumnos(){
-            await fetch(api_url + '/administracion/alumnos/?tipo=alumnos', {
+        async obtenerListadoAspirantes(){
+            this.isLoading = true
+            await fetch(api_url + '/administracion/alumnos/?tipo=aspirantes', {
                 method: 'GET',
                 headers:{
                     'Content-Type': 'application/json',
@@ -142,11 +147,13 @@ export default {
                             return false
                         }
                     }
-                    this.alumnos = response.alumnos
+                    this.aspirantes = response.alumnos
                     this.catalogos = response.catalogos
+                    this.hayRegistros = this.aspirantes.length > 0 ? true : false
                 }).finally(() => {
                     var selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
+                    this.isLoading = false
                 })
             })
         },
@@ -156,12 +163,13 @@ export default {
     },
     data(){
         return {
-            alumnos: [],
+            aspirantes: [],
             hayRegistros: false,
             busqueda: {
                 matricula: ''
             },
             catalogos: [],
+            isLoading: false
         }
     }
 }

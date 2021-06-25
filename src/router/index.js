@@ -48,6 +48,18 @@ const routes = [
     name:"NuevoAlumno",
     component: () =>
       import(/* webpackChunkName: "NuevoAlumno" */ "../Administracion/Alumnos/Agregar.vue")
+  },
+  {
+    path: "/administracion/aspirantes",
+    name:"ListaAspirantes",
+    component: () =>
+      import(/* webpackChunkName: "ListadoAspirantes" */ "../Administracion/Aspirantes/Index.vue")
+  },
+  {
+    path: "/administracion/aspirante/:id",
+    name:"VistaAspirante",
+    component: () =>
+      import(/* webpackChunkName: "VistaAspirante" */ "../Administracion/Aspirantes/Aspirante.vue")
   }
 ];
 
