@@ -7,8 +7,10 @@
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1 sticky-action">
                             <div class="card-content white-text text-center">
-                                <span class="card-title">{{ numero_alumnos }}</span>
-                                <p>Alumnos en sistema</p>
+                                <span class="material-icons" style="font-size: 48px">school</span>
+                                <span class="card-title">
+                                    {{ numero_alumnos }} Alumnos en sistema
+                                </span>
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/alumnos" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
@@ -24,8 +26,8 @@
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1">
                             <div class="card-content white-text text-center">
-                                <span class="card-title">{{ numero_usuarios }}</span>
-                                <p>Usuarios en sistema</p>
+                                <span class="material-icons" style="font-size: 48px">person</span>
+                                <span class="card-title">{{ numero_usuarios }} Usuarios en sistema</span>
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/usuarios" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
@@ -40,8 +42,8 @@
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1">
                             <div class="card-content white-text text-center">
-                                <span class="card-title">{{ numero_aspirantes }}</span>
-                                <p>Aspirantes en sistema</p>
+                                <span class="material-icons" style="font-size: 48px">hourglass_empty</span>
+                                <span class="card-title">{{ numero_aspirantes }} Aspirantes en sistema</span>
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/aspirantes" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>

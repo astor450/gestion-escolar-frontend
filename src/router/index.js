@@ -60,6 +60,12 @@ const routes = [
     name:"VistaAspirante",
     component: () =>
       import(/* webpackChunkName: "VistaAspirante" */ "../Administracion/Aspirantes/Aspirante.vue")
+  },
+  {
+    path: "/administracion/usuarios",
+    name:"ListaUsuarios",
+    component: () =>
+      import(/* webpackChunkName: "ListadoUsuarios" */ "../Administracion/Usuarios/Index.vue")
   }
 ];
 
