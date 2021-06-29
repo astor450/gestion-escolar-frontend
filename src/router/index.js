@@ -66,6 +66,18 @@ const routes = [
     name:"ListaUsuarios",
     component: () =>
       import(/* webpackChunkName: "ListadoUsuarios" */ "../Administracion/Usuarios/Index.vue")
+  },
+  {
+    path: "/administracion/nuevo-usuario",
+    name:"NuevoUsuario",
+    component: () =>
+      import(/* webpackChunkName: "NuevoUsuario" */ "../Administracion/Usuarios/Agregar.vue")
+  },
+  {
+    path: "/administracion/areas",
+    name:"Areas",
+    component: () =>
+      import(/* webpackChunkName: "Areas" */ "../Administracion/Areas/Index.vue")
   }
 ];
 
