@@ -78,6 +78,18 @@ const routes = [
     name:"Areas",
     component: () =>
       import(/* webpackChunkName: "Areas" */ "../Administracion/Areas/Index.vue")
+  },
+  {
+    path: "/administracion/asignaturas",
+    name:"ListarAsignaturas",
+    component: () =>
+      import(/* webpackChunkName: "ListadoAsignaturas" */ "../Administracion/Asignaturas/Index.vue")
+  },
+  {
+    path: "/administracion/nueva-asignatura",
+    name:"NuevaAsignatura",
+    component: () =>
+      import(/* webpackChunkName: "NuevaAsignatura" */ "../Administracion/Asignaturas/Agregar.vue")
   }
 ];
 

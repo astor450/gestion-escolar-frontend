@@ -9,7 +9,7 @@
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">school</span>
                                 <span class="card-title">
-                                    {{ numero_alumnos }} Alumnos en sistema
+                                    {{ numero_alumnos }} Alumnos
                                 </span>
                             </div>
                             <div class="card-action">
@@ -27,7 +27,7 @@
                         <div class="card blue-colegio darken-1">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">person</span>
-                                <span class="card-title">{{ numero_usuarios }} Usuarios en sistema</span>
+                                <span class="card-title">{{ numero_usuarios }} Usuarios</span>
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/usuarios" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
@@ -43,7 +43,7 @@
                         <div class="card blue-colegio darken-1">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">hourglass_empty</span>
-                                <span class="card-title">{{ numero_aspirantes }} Aspirantes en sistema</span>
+                                <span class="card-title">{{ numero_aspirantes }} Aspirantes</span>
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/aspirantes" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
@@ -62,11 +62,30 @@
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">domain</span>
                                 <span class="card-title">
-                                    {{ numero_areas }} Áreas en sistema
+                                    {{ numero_areas }} Áreas
                                 </span>
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/areas" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Administrar</router-link>
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col m4 s12">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div class="card blue-colegio darken-1 sticky-action">
+                            <div class="card-content white-text text-center">
+                                <span class="material-icons" style="font-size: 48px">domain</span>
+                                <span class="card-title">
+                                    {{ numero_asignaturas }} Asignaturas y Seminarios
+                                </span>
+                            </div>
+                            <div class="card-action">
+                                <router-link style="color:white;" to="/administracion/asignaturas" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listar</router-link>
+                                <router-link style="color:white;" to="/administracion/nueva-asignatura" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nueva</router-link>
                                 &nbsp;
                             </div>
                         </div>
@@ -120,6 +139,7 @@ export default {
                     this.numero_usuarios = response.cantidad_usuarios
                     this.numero_aspirantes = response.cantidad_aspirantes
                     this.numero_areas = response.cantidad_areas
+                    this.numero_asignaturas = response.cantidad_asignaturas
                 })
             }).finally(() => {
                 this.isLoading = false
@@ -131,6 +151,7 @@ export default {
             numero_alumnos: 0,
             numero_usuarios: 0,
             numero_aspirantes: 0,
+            numero_asignaturas: 0,
             isLoading: false,
             numero_areas: 0,
         }
