@@ -28,7 +28,7 @@
                         <label for="tipo">Tipo</label>
                     </div>
                     <div class="col s12 m3 input-field">
-                        <select title="asd" id="nivel" ref="nivel" v-model="asignatura.nivel" @change="asignarSemestres()">
+                        <select title="asd" id="nivel" ref="nivel" v-model="asignatura.nivel">
                             <option value=""></option>
                             <option v-for="nivel in catalogos.niveles" v-bind:key="nivel">
                                 {{ nivel }}
@@ -38,15 +38,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 m6 input-field">
-                        <select title="asd" id="programa" ref="programa" v-model="asignatura.programa">
-                            <option value=""></option>
-                            <option v-for="programa in catalogos.programas" v-bind:key="programa._id" v-bind:value="programa._id">
-                                {{ programa.nombre }}
-                            </option>
-                        </select>
-                        <label for="programa">Programa</label>
-                    </div>
                     <div class="col s12 m6 input-field">
                         <select title="asd" id="semestre" ref="semestre" v-model="asignatura.semestre">
                             <option value=""></option>
@@ -60,7 +51,7 @@
                 <button 
                     class="blue-colegio waves-effect btn right" 
                     style="margin-bottom:2em;" 
-                    :disabled="(asignatura.nombre == '' || asignatura.nivel == '' || asignatura.tipo == '')"
+                    :disabled="(asignatura.nombre == '' || asignatura.nivel == '' || asignatura.tipo == '' || asignatura.semestre == '')"
                     @click.prevent="guardarAsignatura()"
                     >
                     Guardar
@@ -75,6 +66,7 @@ import {api_url, store} from "../../main"
 import router from "../../router/index"
 import M from "materialize-css"
 import Preloader from "../../components/Preloader.vue"
+
 export default({
     components:{
         Preloader
@@ -82,6 +74,9 @@ export default({
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
+        for (let index = 0; index < 8; index++) {
+            this.catalogos.semestres.push('SEMESTRE ' + (index + 1))
+        }
         this.obtenerCatalogos()
     },
     methods: {
@@ -144,37 +139,12 @@ export default({
                     nivel: '',
                     docente_asignado: '',
                     docente_propuesto: '',
-                    programa: '',
                     semestre: ''
                 }
+                var selects = document.querySelectorAll('select')
+                selects.selectedIndex = 0
+                M.FormSelect.init(selects, {})
             })
-        },
-        asignarSemestres(){
-            const nivel = this.$refs.nivel.value
-            this.catalogos.semestres = []
-            switch (nivel) {
-                case 'LICENCIATURA':
-                    for (let index = 0; index < 8; index++) {
-                        this.catalogos.semestres.push('SEMESTRE ' + (index + 1))
-                    }
-                    break;
-                case 'MAESTRÍA' :
-                    for (let index = 0; index < 5; index++) {
-                        this.catalogos.semestres.push('SEMESTRE ' + (index + 1))
-                    }
-                    break
-                case 'DOCTORADO':
-                    for (let index = 0; index < 8; index++) {
-                        this.catalogos.semestres.push('SEMESTRE ' + (index + 1))
-                    }
-                    break
-                default:
-                    this.catalogos.semestres = []
-                    break;
-            }
-            var selects = document.querySelectorAll('select')
-            M.FormSelect.init(selects, {})
-            return;
         }
     },
     data() {

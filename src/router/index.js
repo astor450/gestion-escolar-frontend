@@ -90,6 +90,18 @@ const routes = [
     name:"NuevaAsignatura",
     component: () =>
       import(/* webpackChunkName: "NuevaAsignatura" */ "../Administracion/Asignaturas/Agregar.vue")
+  },
+  {
+    path: "/administracion/periodos",
+    name:"ListarPeriodos",
+    component: () =>
+      import(/* webpackChunkName: "ListadoPeriodos" */ "../Administracion/Periodos/Index.vue")
+  },
+  {
+    path: "/administracion/agregar-periodo",
+    name:"NuevoPeriodo",
+    component: () =>
+      import(/* webpackChunkName: "NuevoPeriodo" */ "../Administracion/Periodos/Agregar.vue")
   }
 ];
 

@@ -1,6 +1,6 @@
 <template>
     <div class="container z-depth-1 mt-4">
-        <!-- <Preloader v-if="isLoading" /> -->
+        <Preloader v-if="isLoading" />
         <div class="row">
             <nav>
                 <div class="nav-wrapper blue-colegio">
@@ -18,7 +18,6 @@
                     <thead>
                         <th>Nombre</th>
                         <th>Nivel Escolar</th>
-                        <th>Programa</th>
                         <th>Tipo</th>
                         <th>Docente Asignado</th>
                         <th>Docente Propuesto</th>
@@ -28,7 +27,6 @@
                         <tr v-for="asignatura in asignaturas" v-bind:key="asignatura._id">
                             <td>{{ asignatura.nombre }}</td>
                             <td>{{ asignatura.nivel }}</td>
-                            <td>{{ asignatura.programa }}</td>
                             <td>{{ asignatura.tipo }}</td>
                             <td>{{ asignatura.docente_asignado }}</td>
                             <td>{{ asignatura.docente_propuesto }}</td>
@@ -51,7 +49,7 @@ import M from "materialize-css"
 import Preloader from "../../components/Preloader.vue"
 
 export default({
-    component:{
+    components:{
         Preloader
     },
     mounted(){
@@ -97,6 +95,8 @@ export default({
     data() {
         return {
             hayRegistros: false,
+            isLoading: false,
+            asignaturas: []
         }
     }
 })

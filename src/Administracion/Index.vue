@@ -84,7 +84,7 @@
                                 </span>
                             </div>
                             <div class="card-action">
-                                <router-link style="color:white;" to="/administracion/asignaturas" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listar</router-link>
+                                <router-link style="color:white;" to="/administracion/asignaturas" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
                                 <router-link style="color:white;" to="/administracion/nueva-asignatura" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nueva</router-link>
                                 &nbsp;
                             </div>

@@ -17,11 +17,19 @@
     </div>
   </nav>
   <router-view />
+  <footer v-if="logged_in" class="page-footer" :class="{ ' teal darken-1': periodo_actual.nombre != '', 'red darken-2': periodo_actual.nombre == '' }">
+      <span v-if="periodo_actual.nombre != ''">
+        El periodo actual es: {{ periodo_actual.nombre }}
+      </span>
+      <span style="margin-left:2em; margin-right:2em;" v-else class="">
+        No hay periodos configurados <a href="/administracion/agregar-periodo" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Agregar uno</a>
+      </span>
+  </footer>
 </template>
 
 <script>
 import M from "materialize-css"
-import {store} from "./main"
+import {store, api_url} from "./main"
 export default {
   name: "App",
   mounted () {
@@ -30,6 +38,10 @@ export default {
     M.AutoInit()
     var tooltips = document.querySelectorAll('.tooltipped')
     M.Tooltip.init(tooltips, { position: 'bottom' } )
+
+    if(this.logged_in){
+      this.obtenerPeriodoActual()
+    }
     
   },
   methods: {
@@ -41,12 +53,42 @@ export default {
     },
     cerrarSesion(){
       store.commit('logout')
+    },
+    async obtenerPeriodoActual(){
+      await fetch(api_url + '/administracion/periodos/actual', {
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + store.state.user.token
+        }
+      }).then((request) => {
+        request.json().then((response) => {
+          if(response.status != 'success'){
+            if(response.msg != "" && response.msg != undefined){
+              store.commit('logout')
+            } else {
+              M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
+              return false
+            }
+          }
+          if(response.periodo != undefined && response.periodo.nombre != undefined){
+            this.periodo_actual = response.periodo
+          }
+        })
+      })
     }
   },
   data(){
     return {
       logged_in: false,
-      uname: store.state.user.name
+      uname: store.state.user.name,
+      periodo_actual: {
+        nombre: '',
+        inicio: '',
+        cierre: '',
+        descripcion: '',
+        activo: false
+      }
     }
   }
 };
@@ -90,5 +132,12 @@ body, html, #app{
 }
 .mt-5{
     margin-top: 2em !important;
+}
+.page-footer{
+  position: absolute;
+  bottom:0px;
+  width: 100%;
+  height:50px;
+  padding-top: 1em !important;
 }
 </style>
