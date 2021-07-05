@@ -17,11 +17,15 @@
     </div>
   </nav>
   <router-view />
-  <footer v-if="logged_in" class="page-footer" :class="{ ' teal darken-1': periodo_actual.nombre != '', 'red darken-2': periodo_actual.nombre == '' }">
-      <span v-if="periodo_actual.nombre != ''">
-        El periodo actual es: {{ periodo_actual.nombre }}
+  <footer v-if="logged_in && request_finished" class="page-footer" :class="{ ' teal darken-1': (periodo_actual.nombre != '' && periodo_actual.activo ), 'red darken-2': (periodo_actual.nombre == '' || !periodo_actual.activo) }">
+      <span style="margin-left:2em; margin-right:2em;" v-if="periodo_actual.nombre != '' && periodo_actual.activo">
+        El periodo actual es: {{ periodo_actual.nombre }}, "{{ periodo_actual.descripcion }}" que comprende desde: {{ periodo_actual.inicio }} hasta: {{ periodo_actual.cierre }}
       </span>
-      <span style="margin-left:2em; margin-right:2em;" v-else class="">
+      <span style="margin-left:2em; margin-right:2em;" v-else-if="!periodo_actual.activo && periodo_actual.nombre != ''">
+        El periodo {{ periodo_actual.nombre }} No se encuentra activo
+        <a :href="'/administracion/periodo/' + periodo_actual._id" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Editar Periodo</a>
+      </span>
+      <span style="margin-left:2em; margin-right:2em;" v-else>
         No hay periodos configurados <a href="/administracion/agregar-periodo" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Agregar uno</a>
       </span>
   </footer>
@@ -75,12 +79,13 @@ export default {
             this.periodo_actual = response.periodo
           }
         })
-      })
+      }).finally(() => {this.request_finished=true;})
     }
   },
   data(){
     return {
       logged_in: false,
+      request_finished: false,
       uname: store.state.user.name,
       periodo_actual: {
         nombre: '',
@@ -117,6 +122,9 @@ body, html, #app{
 }
 .container{
   background-color: #ffffff;
+  margin-bottom: 4em !important;
+} .container-fluid{
+  margin-bottom: 4em !important;
 }
 .mt-1{
     margin-top: 0.25em !important;
@@ -134,10 +142,12 @@ body, html, #app{
     margin-top: 2em !important;
 }
 .page-footer{
-  position: absolute;
-  bottom:0px;
+  position: fixed;
+  text-align: center;
+  bottom:0em;
   width: 100%;
-  height:50px;
+  min-height:50px;
   padding-top: 1em !important;
+  z-index: 10000 !important;
 }
 </style>

@@ -7,7 +7,7 @@
                     <div class="col s12">
                         <router-link to="/administracion" class="breadcrumb">Administración</router-link>
                         <router-link to="/administracion/periodos" class="breadcrumb">Periodos</router-link>
-                        <router-link to="/administracion/agregar-periodo" class="breadcrumb">Agregar</router-link>
+                        <router-link :to="'/administracion/periodo/' + periodo._id " class="breadcrumb">Editar</router-link>
                     </div>
                 </div>
             </nav>
@@ -76,6 +76,7 @@ export default({
         M.Datepicker.init(date_pickers, {
             format: 'yyyy-mm-dd'
         });
+        this.informacionPeriodo()
     },
     methods: {
         check_login(){
@@ -84,9 +85,35 @@ export default({
             }
             this.uname = store.state.user.name
         },
+        async informacionPeriodo(){
+            this.isLoading = true
+            let periodo_id = this.$route.params.id
+            await fetch(api_url + '/administracion/periodos/' + periodo_id,{
+                method: 'GET',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                }
+            }).then((request) => {
+                request.json().then((response) => {
+                    if(response.status != 'success'){
+                        if(response.msg != "" && response.msg != undefined){
+                            store.commit('logout')
+                        } else {
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            return false
+                        }
+                    }
+                    this.periodo = response.periodo
+                })
+            }).finally(() => {
+                this.isLoading = false
+            })
+        },
         async guardarPeriodo(){
             this.isLoading = true
-            await fetch(api_url + '/administracion/periodos/agregar',{
+            let periodo_id = this.$route.params.id
+            await fetch(api_url + '/administracion/periodos/' + periodo_id,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -104,7 +131,7 @@ export default({
                         }
                     }
                     M.toast({ html: response.message, classes: 'green darken-2' })
-                    router.push('/administracion/periodos')
+                    location.reaload()
                 })
             }).finally(() => {
                 this.isLoading = false
@@ -124,7 +151,8 @@ export default({
                 cierre: '',
                 descripcion: '',
                 activo: false,
-                registro_activo: false
+                registro_activo: false,
+                _id: ''
             },
             catalogos:{
                 

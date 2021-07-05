@@ -102,6 +102,12 @@ const routes = [
     name:"NuevoPeriodo",
     component: () =>
       import(/* webpackChunkName: "NuevoPeriodo" */ "../Administracion/Periodos/Agregar.vue")
+  },
+  {
+    path: "/administracion/periodo/:id",
+    name:"VistaPeriodo",
+    component: () =>
+      import(/* webpackChunkName: "VistaPeriodo" */ "../Administracion/Periodos/Periodo.vue")
   }
 ];
 
