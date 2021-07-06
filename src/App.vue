@@ -37,6 +37,7 @@ import {store, api_url} from "./main"
 export default {
   name: "App",
   mounted () {
+    document.title = "Sistema de Administración y Gestión Escolar de El Colegio de Morelos SAGECM"
     this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
     this.islogged()
     M.AutoInit()

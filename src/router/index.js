@@ -108,6 +108,24 @@ const routes = [
     name:"VistaPeriodo",
     component: () =>
       import(/* webpackChunkName: "VistaPeriodo" */ "../Administracion/Periodos/Periodo.vue")
+  },
+  {
+    path: "/administracion/programas-escolares",
+    name:"ListarProgramasEscolares",
+    component: () =>
+      import(/* webpackChunkName: "ListadoProgramasEscolares" */ "../Administracion/ProgramasEscolares/Index.vue")
+  },
+  {
+    path: "/administracion/nuevo-programa-escolar",
+    name:"NuevoProgramaEscolar",
+    component: () =>
+      import(/* webpackChunkName: "NuevoProgramaEscolar" */ "../Administracion/ProgramasEscolares/Agregar.vue")
+  },
+  {
+    path: "/administracion/programa-escolar/:id",
+    name:"VistaProgramaEscolar",
+    component: () =>
+      import(/* webpackChunkName: "VistaProgramaEscolar" */ "../Administracion/ProgramasEscolares/ProgramaEscolar.vue")
   }
 ];
 
