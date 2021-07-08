@@ -11,15 +11,6 @@
                     </div>
                 </div>
             </nav>
-            <div class="col offset-m9 offset-l10 l2 m3 s12 mt-2" style="margin-bottom:0.5em;">
-                <router-link
-                    to="/administracion/nuevo-programa-escolar"
-                    data-position="bottom" 
-                    data-tooltip="Al dar clic aquí, será redirigido a otra ventana para agregar un nuevo usuario" 
-                    class="btn btn-medium waves-effect waves-light blue-colegio tooltipped">
-                        <i class="material-icons left">add</i>Nuevo Programa Escolar
-                </router-link>
-            </div>
         </div>
         <div class="row">
             <div class="col s12 m6 input-field">
