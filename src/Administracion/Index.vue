@@ -5,7 +5,7 @@
             <div class="col m4 s12">
                 <div class="row">
                     <div class="col s12 m12">
-                        <div class="card blue-colegio darken-1 sticky-action">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">school</span>
                                 <span class="card-title">
@@ -24,7 +24,7 @@
             <div class="col m4 s12">
                 <div class="row">
                     <div class="col s12 m12">
-                        <div class="card blue-colegio darken-1">
+                        <div class="card blue-colegio darken-1 unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">person</span>
                                 <span class="card-title">{{ numero_usuarios }} Usuarios</span>
@@ -40,7 +40,7 @@
             <div class="col m4 s12">
                 <div class="row">
                     <div class="col s12 m12">
-                        <div class="card blue-colegio darken-1">
+                        <div class="card blue-colegio darken-1 unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">hourglass_empty</span>
                                 <span class="card-title">{{ numero_aspirantes }} Aspirantes</span>
@@ -58,7 +58,7 @@
             <div class="col m4 s12">
                 <div class="row">
                     <div class="col s12 m12">
-                        <div class="card blue-colegio darken-1 sticky-action">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">domain</span>
                                 <span class="card-title">
@@ -76,7 +76,7 @@
             <div class="col m4 s12">
                 <div class="row">
                     <div class="col s12 m12">
-                        <div class="card blue-colegio darken-1 sticky-action">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">domain</span>
                                 <span class="card-title">
@@ -95,7 +95,7 @@
             <div class="col m4 s12">
                 <div class="row">
                     <div class="col s12 m12">
-                        <div class="card blue-colegio darken-1 sticky-action">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">playlist_add_check</span>
                                 <span class="card-title">
@@ -104,7 +104,7 @@
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/programas-escolares" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
-                                <router-link style="color:white;" to="/administracion/nueva-programa-escolar" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nuevo</router-link>
+                                <router-link style="color:white;" to="/administracion/nuevo-programa-escolar" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nuevo</router-link>
                                 &nbsp;
                             </div>
                         </div>

@@ -37,7 +37,7 @@ import {store, api_url} from "./main"
 export default {
   name: "App",
   mounted () {
-    document.title = "Sistema de Administración y Gestión Escolar de El Colegio de Morelos SAGECM"
+    document.title = "Sistema de Administración y Gestión Escolar de El Colegio de Morelos SAGECOM"
     this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
     this.islogged()
     M.AutoInit()
@@ -102,6 +102,7 @@ export default {
 <style>
 #app{
   min-height: 100hv !important;
+  height:auto !important;
 }
 .blue-colegio{
   background-color: #048FD4 !important;
@@ -123,7 +124,8 @@ body, html, #app{
 }
 .container{
   background-color: #ffffff;
-  margin-bottom: 4em !important;
+  margin-bottom: 5em !important;
+  height: auto !important;
 } .container-fluid{
   margin-bottom: 4em !important;
 }
@@ -150,5 +152,8 @@ body, html, #app{
   min-height:50px;
   padding-top: 1em !important;
   z-index: 10000 !important;
+}
+.unselectable{
+  user-select: none !important;
 }
 </style>
