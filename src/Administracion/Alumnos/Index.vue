@@ -83,21 +83,25 @@
                 <div style="margin-left:2em; margin-right:2em;">
                     <table class="striped responsive-table highlight">
                         <thead>
-                            <th>#</th>
                             <th>Matrícula</th>
                             <th>Nombre</th>
-                            <th>Primer Apellido</th>
-                            <th>Segundo Apellido</th>
+                            <th>Apellidos</th>
+                            <th>Area</th>
+                            <th>Nivel</th>
                             <th>Correo</th>
-                            <th>Incrito desde</th>
                         </thead>
                         <tbody>
                             <tr v-for="alumno in alumnos" v-bind:key="alumno._id">
-
+                                <td>{{ alumno.matricula }}</td>
+                                <td>{{ alumno.nombre }}</td>
+                                <td>{{ alumno.apellidos }}</td>
+                                <td>{{ alumno.area }}</td>
+                                <td>{{ alumno.nivel }}</td>
+                                <td>{{ alumno.correo }}</td>
                             </tr>
                         </tbody>
                     </table>
-
+                    <Pagination :minPage="1" v-on:cambio-ruta="obtenerListadoAlumnos()" :maxPage="maxPage" url="/administracion/alumnos" :currentPage="$route.query.page != undefined ? $route.query.page : 1" />
                     <span v-if="!hayRegistros">
                         No hay datos para mostrar
                     </span>
@@ -111,8 +115,12 @@
 import router from "../../router/index"
 import { api_url, store } from "../../main"
 import M from 'materialize-css'
+import Pagination from '../../components/Pagination.vue'
 
 export default {
+    components:{
+        Pagination
+    },
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
@@ -126,7 +134,8 @@ export default {
             this.uname = store.state.user.name
         },
         async obtenerListadoAlumnos(){
-            await fetch(api_url + '/administracion/alumnos/?tipo=alumnos', {
+            const page = this.$route.query.page != undefined ? this.$route.query.page : 1
+            await fetch(api_url + '/administracion/alumnos/?tipo=alumnos&page=' + page, {
                 method: 'GET',
                 headers:{
                     'Content-Type': 'application/json',
@@ -144,6 +153,7 @@ export default {
                     }
                     this.alumnos = response.alumnos
                     this.catalogos = response.catalogos
+                    this.maxPage  = response.pagination.maxPage
                 }).finally(() => {
                     var selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
@@ -162,6 +172,7 @@ export default {
                 matricula: ''
             },
             catalogos: [],
+            maxPage: 1
         }
     }
 }
