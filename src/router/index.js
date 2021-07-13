@@ -127,6 +127,13 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "VistaProgramaEscolar" */ "../Administracion/ProgramasEscolares/ProgramaEscolar.vue")
   }
+  ,
+  {
+    path: "/administracion/usuarios/:id",
+    name:"VistaUsuario",
+    component: () =>
+      import(/* webpackChunkName: "VistaUsuario" */ "../Administracion/Usuarios/Usuario.vue")
+  }
 ];
 
 const router = createRouter({
