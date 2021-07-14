@@ -7,6 +7,7 @@
       <ul v-show="logged_in" class="right">
         <li>
           <a class="dropdown-trigger" style="background-color: #64646C; !important" href="#!" ref="sessionButton" data-target="dropdown1">
+            <img class="left mt-2" :src="foto == '' ? require('@/assets/user_placeholder.png') : foto" style="height:40px;"/> &nbsp;
             {{ uname }} <i class="material-icons right">arrow_drop_down</i>
           </a>
         </li>
@@ -88,6 +89,7 @@ export default {
       logged_in: false,
       request_finished: false,
       uname: store.state.user.name,
+      foto: store.state.user.foto,
       periodo_actual: {
         nombre: '',
         inicio: '',

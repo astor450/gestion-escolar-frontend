@@ -63,6 +63,7 @@
                 <div style="margin-left:2em; margin-right:2em;">
                     <table class="striped responsive-table highlight">
                         <thead>
+                            <th><i class="material-icons">image</i></th>
                             <th>Correo</th>
                             <th>Nombre</th>
                             <th>Primer Apellido</th>
@@ -74,12 +75,13 @@
                         </thead>
                         <tbody>
                             <tr v-for="usuario in usuarios" v-bind:key="usuario._id">
+                                <td><img class="left mt-2" :src="usuario.foto == '' ? require('@/assets/user_placeholder.png') : usuario.foto" style="height:40px;"/></td>
                                 <td>{{ usuario.correo }}</td>
                                 <td>{{ usuario.nombre }}</td>
                                 <td>{{ usuario.primer_apellido }}</td>
                                 <td>{{ usuario.segundo_apellido }}</td>
-                                <td>{{ usuario.tipo.charAt(0).toUpperCase() + usuario.tipo.slice(1) }}</td>
-                                <td></td>
+                                <td>{{ usuario.tipo.nombre }}</td>
+                                <td>{{ usuario.area.nombre }}</td>
                                 <td></td>
                                 <td>
                                     <router-link :to="'/administracion/usuarios/' + usuario._id" class="btn-flat waves-effect">

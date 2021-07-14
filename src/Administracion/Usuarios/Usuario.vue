@@ -1,11 +1,19 @@
 <template>
     <div class="container z-depth-1 mt-4">
-        <button 
-            style="position:fixed; bottom: 5em; right: 2em;" 
-            class="btn-floating btn-large waves-effect right blue-colegio"
-            @click.prevent="editar()">
-            <i class="material-icons">edit</i>
-        </button>
+        <div class="fixed-action-btn" style="margin-bottom:3em;">
+            <a class="btn-floating btn-large waves-effect right">
+                <i class="material-icons">settings</i>
+            </a>
+            <ul>
+                <li>
+                    <a 
+                        class="btn-floating blue-colegio"
+                        @click.prevent="editar()">
+                        <i class="material-icons">edit</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
         <Preloader v-if="isLoading" />
         <div class="row">
             <nav>
@@ -20,7 +28,14 @@
         </div>
         <div class="row">
             <div class="col s12 m3">
-
+                <img :src="usuario.foto == '' ? require('@/assets/user_placeholder.png') : usuario.foto" ref="profileImage" style="width:100%;" :title="usuario.nombre"/>
+                <button v-if="!cambioImagen" ref="imagePicker" class="btn btn-floating right waves-effect" @click.prevent="this.$refs.findFoto.click();" style="position:relative; bottom:4em; right:1em;">
+                    <i class="material-icons">add_a_photo</i>
+                </button>
+                <button v-else class="btn btn-floating right waves-effect green darken-2" @click.prevent="guardarImagen()" style="position:relative; bottom:4em; right:1em;">
+                    <i class="material-icons">save</i>
+                </button>
+                <input type="file" ref="findFoto" v-show="false" @change="seleccionarImagen()"/>
             </div>
             <div class="col s12 m9">
                 <div class="row" v-if="!editando">
@@ -58,7 +73,11 @@
                     </div>
                     <div class="col s12 m3 input-field">
                         <strong>Tipo</strong><br/>
-                        {{ usuario.tipo.charAt(0).toUpperCase() + usuario.tipo.slice(1) }}
+                        {{ usuario.tipo.nombre }}
+                    </div>
+                    <div class="col s12 m3 input-field">
+                        <strong>Área</strong><br/>
+                        {{ usuario.area.nombre }}
                     </div>
                 </div>
                 <div class="row" v-else>
@@ -73,6 +92,24 @@
                         </select>
                         <label for="tipo">Tipo</label>
                     </div>
+                    <div class="col s12 m4 input-field">
+                        <select type="text" v-model="usuario.area" id="area">
+                            <option value=""></option>
+                            <option v-for="area in catalogos.areas" v-bind:key="area._id" v-bind:value="area">{{ area.nombre }}</option>
+                        </select>
+                        <label for="tipo">Area</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m12" v-if="editando">
+                    <button 
+                        @click.prevent="guardarUsuario()"
+                        class="btn blue-colegio btn-small right"
+                        :disabled="usuario.nombre == '' || usuario.primer_apellido == '' || usuario.segundo_apellido == ''"
+                        >
+                        Guardar
+                    </button>
                 </div>
             </div>
         </div>
@@ -93,6 +130,8 @@ export default {
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
         this.obtenerInformacionUsuario()
+        var floatingButtons = document.querySelectorAll('.fixed-action-btn');
+        M.FloatingActionButton.init(floatingButtons);
     },
     methods:{
         check_login(){
@@ -121,7 +160,7 @@ export default {
                         if(response.msg != "" && response.msg != undefined){
                             store.commit('logout')
                         } else {
-                            M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
+                            M.toast({ html: response.message, classes: 'red darken-2' })
                             return false
                         }
                     }
@@ -143,12 +182,91 @@ export default {
                 }, 200)
             })
         },
+        async guardarUsuario(){
+            const user_id = this.$route.params.id;
+            this.isLoading = true
+            await fetch(api_url + '/administracion/usuarios/' + user_id, {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                },
+                body: JSON.stringify(this.usuario)
+            }).then((request) => {
+                request.json().then((response) => {
+                    if(response.status != 'success'){
+                        if(response.msg != "" && response.msg != undefined){
+                            store.commit('logout')
+                        } else {
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            return false
+                        }
+                    }
+                    M.toast({ html: response.message, classes: 'green darken-2'})
+                    this.editando = false
+                })
+            }).finally(() => {
+                this.isLoading = false
+            })
+        },
+        async seleccionarImagen(){
+            this.isLoading = true
+            this.$refs.profileImage.src =  await this.base64Photo()
+            this.cambioImagen = true
+        },
+        base64Photo(){
+            const ctx = this
+            return new Promise((resolve, reject) =>{
+                const reader = new FileReader();
+                reader.readAsDataURL(this.$refs.findFoto.files[0])
+                reader.onload = () => {
+                    resolve(reader.result)
+                    ctx.isLoading =  false
+                }
+                reader.onerror = error => {
+                    reject(error)
+                    ctx.isLoading =  false
+                }
+            })
+        },
+        async guardarImagen(){
+            this.isLoading = true
+            const user_id = this.$route.params.id;
+            await fetch(api_url + '/administracion/usuarios/' + user_id + '?update=foto', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                },
+                body: JSON.stringify({
+                    foto: this.$refs.profileImage.src.split(',')[1],
+                    extension: this.$refs.findFoto.files[0].name.split(".").pop()
+                })
+            }).then(request => {
+                request.json().then((response) => {
+                    if(response.status != 'success'){
+                        if(response.msg != "" && response.msg != undefined){
+                            store.commit('logout')
+                        } else {
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            return false
+                        }
+                    }
+                    M.toast({ html: response.message, classes: 'green darken-2'})
+                    this.editando = false
+                    this.cambioImagen = false
+                })
+            }).finally(() => {
+                this.isLoading = false
+            })
+        }
     },
     data(){
         return {
             isLoading: false,
             usuario: {
-                tipo: ''
+                tipo: {},
+                area: {},
             },
             catalogos: {
                 areas: [],
@@ -158,6 +276,7 @@ export default {
 
             },
             editando: false,
+            cambioImagen: false
         }
     }
 }

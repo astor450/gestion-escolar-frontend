@@ -43,7 +43,8 @@ export const store = createStore({
             },
             user: {
                 token: localStorage.getItem('token'),
-                name: localStorage.getItem('uname')
+                name: localStorage.getItem('uname'),
+                foto: localStorage.getItem('foto')
             },
             administrador: {
               correo: '',
@@ -72,6 +73,7 @@ export const store = createStore({
         localStorage.removeItem('token')
         localStorage.removeItem('uname')
         localStorage.removeItem('correo')
+        localStorage.removeItem('foto')
         // M.toast({ html: 'Sesión terminada correctamente', classes: 'green darken-2' })
         location.reload()
       },
@@ -84,6 +86,7 @@ export const store = createStore({
         state.administrador = administrador,
         localStorage.setItem('uname', administrador.uname)
         localStorage.setItem('correo', administrador.correo)
+        localStorage.setItem('foto', administrador.foto)
       }
     }
   });

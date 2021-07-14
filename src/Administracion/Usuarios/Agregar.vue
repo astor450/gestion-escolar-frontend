@@ -1,5 +1,6 @@
 <template>
     <div class="container z-depth-1 mt-4">
+        <Preloader v-if="isLoading" />
         <div class="row">
             <nav>
                 <div class="nav-wrapper blue-colegio">
@@ -34,18 +35,26 @@
                 <div class="row">
                     <div class="col s12 m4 input-field">
                         <select title="asd" ref="area" v-model="usuario.area">
-                            <option v-for="area in catalogos.areas" v-bind:key="area._id" v-bind:value="area._id">{{ area.nombre }}</option>
+                            <option v-for="area in catalogos.areas" v-bind:key="area._id" v-bind:value="area">{{ area.nombre }}</option>
                         </select>
                         <label>Área</label>
                     </div>
                     <div class="col s12 m4 input-field">
                         <select title="asd" ref="area" v-model="usuario.tipo">
-                            <option v-for="tipo in tipos" v-bind:key="tipo" v-bind:value="tipo">{{ tipo }}</option>
+                            <option v-for="tipo in catalogos.tipos" v-bind:key="tipo._id" v-bind:value="tipo">{{ tipo.nombre }}</option>
                         </select>
                         <label>Tipo</label>
                     </div>
+                    <div class="col s12 m4 input-field">
+                        <input type="password" ref="clave" v-model="usuario.clave" id="clave" disabled/>
+                        <label for="clave">Contraseña</label>
+                    </div>
                 </div>
-                <button class="blue-colegio waves-effect btn right" style="margin-bottom:2em;" :disabled="disableSave">Agregar Usuario</button>
+                <button 
+                    class="blue-colegio waves-effect btn right" 
+                    style="margin-bottom:2em;" 
+                    @click.prevent="guardarUsuario()"
+                    :disabled="usuario.nombre == '' || usuario.tipo.nombre == '' || usuario.area.nombre == '' || disableSave">Agregar Usuario</button>
             </form>
         </div>
     </div>
@@ -55,8 +64,12 @@
 import router from "../../router/index"
 import {store, api_url} from "../../main"
 import M from 'materialize-css'
+import Preloader from '../../components/Preloader.vue'
 
 export default ({
+    components:{
+        Preloader
+    },
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
@@ -101,26 +114,55 @@ export default ({
                     M.FormSelect.init(selects, {})
                 })
             })
+        },
+        async guardarUsuario(){
+            this.isLoading = true
+            await fetch(api_url + '/administracion/usuarios/', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                },
+                body: JSON.stringify(this.usuario)
+            }).then((request) => {
+                request.json().then((response) => {
+                    if(response.status != 'success'){
+                        if(response.msg != "" && response.msg != undefined){
+                            store.commit('logout')
+                        } else {
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            return false
+                        }
+                    }
+                    M.toast({ html: response.message, classes: 'green darken-2'})
+                    router.push('/administracion/usuarios/')
+                })
+            }).finally(() => {
+                this.isLoading = false
+            })
         }
     },
     data(){
         return {
             catalogos: {
                 areas: [],
+                tipos: []
             },
-            tipos: [
-                'Administrador',
-                'Estandar',
-                'Soporte',
-            ],
             usuario:{
                 nombre: '',
                 primer_apellido: '',
                 segundo_apellido: '',
                 correo: '',
-                tipo: '',
+                tipo: {
+                    nombre: '',
+                },
+                area: {
+                    nombre: ''
+                },
+                clave: '12345678'
             },
-            disableSave: true,
+            disableSave: false,
+            isLoading: false
         }
     }
 })

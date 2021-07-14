@@ -66,7 +66,8 @@ export default {
               let administrativo = {
                 correo: response.correo,
                 uid: response.uid,
-                uname: response.uname
+                uname: response.uname,
+                foto: response.foto,
               }
               store.commit('setAdminInfo', administrativo)
               if(store.state.user.token != ""){
