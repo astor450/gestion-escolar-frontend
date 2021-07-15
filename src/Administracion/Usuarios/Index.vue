@@ -64,6 +64,7 @@
                     <table class="striped responsive-table highlight">
                         <thead>
                             <th><i class="material-icons">image</i></th>
+                            <th>Acceso</th>
                             <th>Correo</th>
                             <th>Nombre</th>
                             <th>Primer Apellido</th>
@@ -76,6 +77,7 @@
                         <tbody>
                             <tr v-for="usuario in usuarios" v-bind:key="usuario._id">
                                 <td><img class="left mt-2" :src="usuario.foto == '' ? require('@/assets/user_placeholder.png') : usuario.foto" style="height:40px;"/></td>
+                                <td class="center" :class="{ 'red-text': !usuario.habilitado, 'green-text': usuario.habilitado }"><i class="material-icons" v-if="!usuario.habilitado">block</i><i class="material-icons" v-else>check</i></td>
                                 <td>{{ usuario.correo }}</td>
                                 <td>{{ usuario.nombre }}</td>
                                 <td>{{ usuario.primer_apellido }}</td>

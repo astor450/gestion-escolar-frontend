@@ -7,7 +7,7 @@
                     <div class="col s12">
                         <router-link to="/administracion" class="breadcrumb">Administración</router-link>
                         <router-link to="/administracion/asignaturas" class="breadcrumb">Asignaturas y Seminarios</router-link>
-                        <router-link to="/administracion/nueva-asignatura" class="breadcrumb">Agregar</router-link>
+                        <router-link :to="'/administracion/asignaturas/' + asignatura._id " class="breadcrumb">{{ asignatura.nombre }}</router-link>
                     </div>
                 </div>
             </nav>
@@ -75,29 +75,52 @@
 </template>
 
 <script>
-import {api_url, store} from "../../main"
 import router from "../../router/index"
-import M from "materialize-css"
+import { store, api_url } from "../../main"
 import Preloader from "../../components/Preloader.vue"
+import M from "materialize-css"
 
-export default({
+export default {
     components:{
         Preloader
     },
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
-        for (let index = 0; index < 8; index++) {
-            this.catalogos.semestres.push('SEMESTRE ' + (index + 1))
-        }
+        this.informacionAsignatura()
         this.obtenerCatalogos()
     },
-    methods: {
+    methods:{
         check_login(){
             if(!this.logged_in){
                 router.push('/administracion/login')
             }
             this.uname = store.state.user.name
+        },
+        async informacionAsignatura(){
+            this.isLoading = true
+            const asignatura_id = this.$route.params.id
+            fetch(api_url + '/administracion/asignaturas/' + asignatura_id, {
+                method: 'GET',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                }
+            }).then((request) => {
+                request.json().then((response) => {
+                    if(response.status != 'success'){
+                        if(response.msg != "" && response.msg != undefined){
+                            store.commit('logout')
+                        } else {
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            return false
+                        }
+                    }
+                    this.asignatura = response.asignatura
+                })
+            }).finally(() => {
+                this.isLoading = false
+            })
         },
         async obtenerCatalogos(){
             this.isLoading = true
@@ -127,7 +150,8 @@ export default({
         },
         async guardarAsignatura(){
             this.isLoading = true
-            await fetch(api_url + '/administracion/asignaturas/agregar', {
+            const asignatura_id = this.$route.params.id
+            await fetch(api_url + '/administracion/asignaturas/' + asignatura_id, {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -140,37 +164,21 @@ export default({
                         if(response.msg != "" && response.msg != undefined){
                             store.commit('logout')
                         } else {
-                            M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
+                            M.toast({ html: response.message, classes: 'red darken-2' })
                             return false
                         }
                     }
                     M.toast({ html: response.message, classes: 'green darken-2'})
+                    router.push('/administracion/asignaturas')
                 })
             }).finally(() => { 
                 this.isLoading = false 
-                this.asignatura = {
-                    nombre: '',
-                    nivel: '',
-                    docente_asignado: '',
-                    docente_propuesto: '',
-                    semestre: ''
-                }
-                var selects = document.querySelectorAll('select')
-                selects.selectedIndex = 0
-                M.FormSelect.init(selects, {})
             })
         }
     },
-    data() {
+    data(){
         return {
-            asignatura: {
-                nombre: '',
-                nivel: '',
-                docente_asignado: '',
-                observaciones: '',
-                programa: '',
-                semestre: ''
-            },
+            asignatura: {},
             catalogos:{
                 niveles: [
                     'LICENCIATURA', 'MAESTRÍA', 'DOCTORADO'
@@ -184,5 +192,9 @@ export default({
             isLoading: false
         }
     }
-})
+}
 </script>
+
+<style>
+
+</style>

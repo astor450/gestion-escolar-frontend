@@ -11,7 +11,7 @@
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input v-model="clave" type="password" class="validate">
+          <input v-model="clave" id="clave" type="password" class="validate">
           <label for="clave">Contraseña</label>
         </div>
       </div>

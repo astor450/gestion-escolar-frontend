@@ -5,12 +5,12 @@
                 <i class="material-icons">settings</i>
             </a>
             <ul>
-                <li>
-                    <a 
-                        class="btn-floating blue-colegio"
-                        @click.prevent="editar()">
-                        <i class="material-icons">edit</i>
-                    </a>
+                <li><a class="btn-floating blue-colegio tooltipped" data-tooltip="Editar Usuario" @click.prevent="editar()"> <i class="material-icons">edit</i></a></li>
+                <li v-if="usuario.habilitado">
+                    <a href="#confirmBlock" class="btn-floating red darken-2 tooltipped modal-trigger" data-tooltip="Bloquear Acceso"> <i class="material-icons">block</i></a>
+                </li>
+                <li v-else>
+                    <a href="#confirmBlock" class="btn-floating green darken-2 tooltipped modal-trigger" data-tooltip="Habilitar Acceso"> <i class="material-icons">lock_open</i></a>
                 </li>
             </ul>
         </div>
@@ -114,6 +114,25 @@
             </div>
         </div>
     </div>
+    <!-- Modal Structure -->
+    <div id="confirmBlock" class="modal">
+        <div class="modal-content">
+            <h4 class="red-text center" v-if="usuario.habilitado"><i class="material-icons">block</i>Bloquear Acceso a {{ usuario.nombre }} {{ usuario.primer_apellido }} {{ usuario.segundo_apellido }}</h4>
+            <h4 class="green-text center" v-else><i class="material-icons">unlock</i>Permitir Acceso a {{ usuario.nombre }} {{ usuario.primer_apellido }} {{ usuario.segundo_apellido }}</h4>
+            <p class="center mt-5" style="font-size:20px;" v-if="usuario.habilitado">
+                Esto ocasionará que {{ usuario.nombre }} {{ usuario.primer_apellido }} {{ usuario.segundo_apellido }}
+                No pueda iniciar sesión en la plataforma o realice movimiento alguno dentro de ella.
+            </p>
+            <p class="center mt-5" style="font-size:20px;" v-else>
+                Esto ocasionará que {{ usuario.nombre }} {{ usuario.primer_apellido }} {{ usuario.segundo_apellido }}
+                pueda iniciar sesión en la plataforma y realice movimientos dentro de ella.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a @click.prevent="bloquear()" class="waves-effect btn red darken-2">Bloquear</a> &nbsp;
+            <a href="#!" class="modal-close waves-effect btn blue-colegio">Cancelar</a>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -130,8 +149,9 @@ export default {
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
         this.obtenerInformacionUsuario()
-        var floatingButtons = document.querySelectorAll('.fixed-action-btn');
-        M.FloatingActionButton.init(floatingButtons);
+        
+        var modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals, {});
     },
     methods:{
         check_login(){
@@ -169,6 +189,10 @@ export default {
                     this.catalogos.tipos = response.catalogos.tipos
                 }).finally(() =>{
                     this.isLoading = false
+                    var floatingButtons = document.querySelectorAll('.fixed-action-btn');
+                    M.FloatingActionButton.init(floatingButtons);
+                    var tooltips = document.querySelectorAll('.tooltipped')
+                    M.Tooltip.init(tooltips, { position: 'bottom' } )
                 })
             }).finally(() =>{
                     this.isLoading = false
@@ -259,6 +283,32 @@ export default {
             }).finally(() => {
                 this.isLoading = false
             })
+        },
+        async bloquear(){
+            this.isLoading = true
+            const user_id = this.$route.params.id
+            await fetch(api_url + '/administracion/usuarios/' + user_id, {
+                method: 'DELETE',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                },
+            }).then((request) => {
+                request.json().then((response) => {
+                    if(response.status != 'success'){
+                        if(response.msg != "" && response.msg != undefined){
+                            store.commit('logout')
+                        } else {
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            return false
+                        }
+                    }
+                    M.toast({ html: response.message, classes: 'green darken-2'})
+                    router.push('/administracion/usuarios/')
+                })
+            }).finally(() => {
+                this.isLoading = false
+            })
         }
     },
     data(){
@@ -267,6 +317,7 @@ export default {
             usuario: {
                 tipo: {},
                 area: {},
+                habilitado: false,
             },
             catalogos: {
                 areas: [],
