@@ -5,6 +5,7 @@
                 <i class="material-icons">settings</i>
             </a>
             <ul>
+                <li><a class="btn-floating green darken-2 tooltipped" data-tooltip="Modificar Permisos" @click.prevent="editarPermisos()"> <i class="material-icons">verified_user</i></a></li>
                 <li><a class="btn-floating blue-colegio tooltipped" data-tooltip="Editar Usuario" @click.prevent="editar()"> <i class="material-icons">edit</i></a></li>
                 <li v-if="usuario.habilitado">
                     <a href="#confirmBlock" class="btn-floating red darken-2 tooltipped modal-trigger" data-tooltip="Bloquear Acceso"> <i class="material-icons">block</i></a>
