@@ -132,13 +132,18 @@ const routes = [
     name:"VistaProgramaEscolar",
     component: () =>
       import(/* webpackChunkName: "VistaProgramaEscolar" */ "../Administracion/ProgramasEscolares/ProgramaEscolar.vue")
-  }
-  ,
+  },
   {
     path: "/administracion/usuarios/:id",
     name:"VistaUsuario",
     component: () =>
       import(/* webpackChunkName: "VistaUsuario" */ "../Administracion/Usuarios/Usuario.vue")
+  },
+  {
+    path: "/administracion/permisos",
+    name:"ListaPermisos",
+    component: () =>
+      import(/* webpackChunkName: "ListadoPermisos" */ "../Administracion/Permisos/Index.vue")
   }
 ];
 

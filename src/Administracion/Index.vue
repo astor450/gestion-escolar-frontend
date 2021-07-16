@@ -111,6 +111,25 @@
                     </div>
                 </div>
             </div>
+            <div class="col l4 m2 s12">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
+                            <div class="card-content white-text text-center">
+                                <span class="material-icons" style="font-size: 48px">verified_user</span>
+                                <span class="card-title">
+                                    Permisos
+                                </span>
+                            </div>
+                            <div class="card-action">
+                                <router-link style="color:white;" to="/administracion/permisos" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
+                                <router-link style="color:white;" to="/administracion/nuevo-permiso" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nuevo</router-link>
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>

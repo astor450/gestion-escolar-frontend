@@ -1,5 +1,6 @@
 <template>
     <div class="container z-depth-1 mt-4">
+        <Preloader v-if="isLoading" />
         <div class="row">
             <nav>
                 <div class="nav-wrapper blue-colegio">
@@ -107,8 +108,12 @@
 import router from "../../router/index"
 import { api_url, store } from "../../main"
 import M from 'materialize-css'
+import Preloader from '../../components/Preloader.vue'
 
 export default {
+    components:{
+        Preloader,
+    },
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
@@ -122,6 +127,7 @@ export default {
             this.uname = store.state.user.name
         },
         async obtenerListadoAlumnos(){
+            this.isLoading = true
             await fetch(api_url + '/administracion/usuarios/', {
                 method: 'GET',
                 headers:{
@@ -134,7 +140,8 @@ export default {
                         if(response.msg != "" && response.msg != undefined){
                             store.commit('logout')
                         } else {
-                            M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
+                            M.toast({ html: response.message, classes: 'red darken-2' })
+                            router.push('/administracion/')
                             return false
                         }
                     }
@@ -142,6 +149,7 @@ export default {
                     this.hayRegistros = this.usuarios.length != 0 ? true : false
                     // this.catalogos = response.catalogos
                 }).finally(() => {
+                    this.isLoading = false
                     var selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
                 })
@@ -161,6 +169,7 @@ export default {
             catalogos: {
                 roles: []
             },
+            isLoading: false
         }
     }
 }
