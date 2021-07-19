@@ -123,8 +123,26 @@
                             </div>
                             <div class="card-action">
                                 <router-link style="color:white;" to="/administracion/permisos" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
-                                <router-link style="color:white;" to="/administracion/nuevo-permiso" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nuevo</router-link>
                                 &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col l4 m2 s12">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
+                            <div class="card-content white-text text-center">
+                                <span class="material-icons" style="font-size: 48px">av_timer</span>
+                                <span class="card-title">
+                                    {{ cantidad_periodos }} Semestres
+                                </span>
+                            </div>
+                            <div class="card-action">
+                                <router-link style="color:white;" to="/administracion/periodos" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
+                                &nbsp;
+                                <router-link style="color:white;" to="/administracion/agregar-periodo" class="waves-effect btn-flat waves-light"><i class="material-icons left">add</i>Nuevo</router-link>
                             </div>
                         </div>
                     </div>
@@ -179,6 +197,7 @@ export default {
                     this.numero_areas = response.cantidad_areas
                     this.numero_asignaturas = response.cantidad_asignaturas
                     this.numero_programas = response.cantidad_programas
+                    this.cantidad_periodos = response.cantidad_periodos
                     
                 })
             }).finally(() => {
@@ -195,6 +214,7 @@ export default {
             isLoading: false,
             numero_areas: 0,
             numero_programas: 0,
+            cantidad_periodos: 0
         }
     }
 }

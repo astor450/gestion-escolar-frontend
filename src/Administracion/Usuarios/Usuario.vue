@@ -5,7 +5,7 @@
                 <i class="material-icons">settings</i>
             </a>
             <ul>
-                <li><a class="btn-floating green darken-2 tooltipped" data-tooltip="Modificar Permisos" @click.prevent="editarPermisos()"> <i class="material-icons">verified_user</i></a></li>
+                <li><a class="btn-floating green darken-2 tooltipped" data-tooltip="Modificar Permisos" @click.prevent="editarPermisos = true"> <i class="material-icons">verified_user</i></a></li>
                 <li><a class="btn-floating blue-colegio tooltipped" data-tooltip="Editar Usuario" @click.prevent="editar()"> <i class="material-icons">edit</i></a></li>
                 <li v-if="usuario.habilitado">
                     <a href="#confirmBlock" class="btn-floating red darken-2 tooltipped modal-trigger" data-tooltip="Bloquear Acceso"> <i class="material-icons">block</i></a>
@@ -101,9 +101,14 @@
                         <label for="tipo">Area</label>
                     </div>
                 </div>
+                <div class="row" v-if="!editarPermisos">
+                    <div class="col s12 m6">
+                        <h6 class="">El usuario cuenta con {{ usuario.permisos.length }} permisos de un total de {{ usuario.permisos.length + catalogos.permisos.length }}.</h6>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col s12 m12" v-if="editando">
+                <div class="col s12 m12" v-if="editando || hayCambios">
                     <button 
                         @click.prevent="guardarUsuario()"
                         class="btn blue-colegio btn-small right"
@@ -111,6 +116,45 @@
                         >
                         Guardar
                     </button>
+                </div>
+            </div>
+            <div class="row" v-if="editarPermisos">
+                <div class="col s12 m6 ">
+                    <div class="row">
+                        <h6 class="center">Permisos asignados</h6>
+                    </div>
+                    <div class="row" style="max-height:30rem !important; overflow-y:scroll;">
+                        <ul class="collapsible" style="margin-left:2em; margin-right:2em;">
+                            <li v-for="permiso in usuario.permisos" v-bind:key="permiso._id" style="user-select:none;" :ref="permiso._id">
+                                <div class="collapsible-header">
+                                    {{ permiso.nombre }} &nbsp;
+                                    <button @click.prevent="quitar(permiso)" class="btn-floating orange darken-2 right btn-small tooltipped" :data-tooltip="'Revocar Permiso'">
+                                        <i class="material-icons">arrow_forward</i>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="row">
+                        <h6 class="center">Permisos Disponibles</h6>
+                    </div>
+                    <div class="row" style="max-height:30rem !important; overflow-y:scroll;">
+                        <ul class="collapsible" style="margin-left:2em; margin-right:2em;">
+                            <li draggable v-for="permiso in catalogos.permisos" v-bind:key="permiso._id" style="user-select:none;" :ref="permiso._id">
+                                <div class="collapsible-header">
+                                    
+                                    <button @click.prevent="asignar(permiso)" class="btn-floating left btn-small tooltipped" :data-tooltip="'Asignar Permiso '">
+                                        <i class="material-icons">arrow_back</i>
+                                    </button>
+                                    <span class="right">
+                                        &nbsp; {{ permiso.nombre }}
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -188,6 +232,7 @@ export default {
                     this.usuario = response.usuario
                     this.catalogos.areas = response.catalogos.areas
                     this.catalogos.tipos = response.catalogos.tipos
+                    this.catalogos.permisos = response.catalogos.permisos
                 }).finally(() =>{
                     this.isLoading = false
                     var floatingButtons = document.querySelectorAll('.fixed-action-btn');
@@ -229,6 +274,8 @@ export default {
                     }
                     M.toast({ html: response.message, classes: 'green darken-2'})
                     this.editando = false
+                    this.hayCambios = false
+                    this.editarPermisos = false
                 })
             }).finally(() => {
                 this.isLoading = false
@@ -310,6 +357,16 @@ export default {
             }).finally(() => {
                 this.isLoading = false
             })
+        },
+        asignar(permiso){
+            this.usuario.permisos.push(permiso)
+            this.catalogos.permisos = this.catalogos.permisos.filter(asign => asign !== permiso)
+            this.hayCambios = true
+        },
+        quitar(permiso){
+            this.catalogos.permisos.push(permiso)
+            this.usuario.permisos = this.usuario.permisos.filter(asign => asign !== permiso)
+            this.hayCambios = true
         }
     },
     data(){
@@ -319,16 +376,20 @@ export default {
                 tipo: {},
                 area: {},
                 habilitado: false,
+                permisos: []
             },
             catalogos: {
                 areas: [],
-                tipos: []
+                tipos: [],
+                permisos: [],
             },
             usuario_holder: {
 
             },
             editando: false,
-            cambioImagen: false
+            cambioImagen: false,
+            editarPermisos: false,
+            hayCambios: false,
         }
     }
 }

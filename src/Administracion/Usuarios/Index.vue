@@ -42,13 +42,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 m6 input-field">
-                        <select multiple="multiple" title="asd">
-                            <option v-for="rol in catalogos.roles" v-bind:key="rol._id" :value="rol._id">{{ rol.nombre }}</option>
-                        </select>
-                        <label for="buscar.carrera">Rol del Sistema</label>
-                    </div>
-                    <div class="col s12 m6 input-field">
+                    
+                    <div class="col s12 m4 input-field">
                         <select multiple="multiple" title="asd">
                             <option v-for="area in catalogos.areas" v-bind:key="area._id" :value="area._id">{{ area.nombre }}</option>
                         </select>
@@ -72,7 +67,6 @@
                             <th>Segundo Apellido</th>
                             <th>Tipo</th>
                             <th>Área</th>
-                            <th>Roles</th>
                             <th>Acciones</th>
                         </thead>
                         <tbody>
@@ -85,7 +79,6 @@
                                 <td>{{ usuario.segundo_apellido }}</td>
                                 <td>{{ usuario.tipo.nombre }}</td>
                                 <td>{{ usuario.area.nombre }}</td>
-                                <td></td>
                                 <td>
                                     <router-link :to="'/administracion/usuarios/' + usuario._id" class="btn-flat waves-effect">
                                         <i class="material-icons">edit</i>
