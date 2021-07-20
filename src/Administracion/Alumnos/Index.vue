@@ -1,5 +1,16 @@
 <template>
     <div class="container z-depth-1 mt-4">
+        <div class="fixed-action-btn" style="margin-bottom:3em;">
+            <router-link 
+                to="/administracion/nuevo-alumno" 
+                class="btn-floating btn-large waves-effect right"
+                data-position="bottom" 
+                data-tooltip="Al dar clic aquí, será redirigido a otra ventana para agregar un nuevo alumno"
+                >
+                <i class="material-icons">add</i>
+            </router-link>
+        </div>
+        <Preloader v-if="isLoading" />
         <div class="row">
             <nav>
                 <div class="nav-wrapper blue-colegio">
@@ -9,15 +20,6 @@
                     </div>
                 </div>
             </nav>
-            <div class="col offset-m9 offset-l10 l2 m3 s12 mt-2" style="margin-bottom:0.5em;">
-                <router-link
-                    to="/administracion/nuevo-alumno"
-                    data-position="bottom" 
-                    data-tooltip="Al dar clic aquí, será redirigido a otra ventana para agregar un nuevo alumno" 
-                    class="btn btn-medium waves-effect waves-light blue-colegio tooltipped">
-                        <i class="material-icons left">add</i>Nuevo Alumno
-                </router-link>
-            </div>
         </div>
         
         <div class="row" style="margin-left:2em; margin-right:2em;">
@@ -89,6 +91,7 @@
                             <th>Area</th>
                             <th>Nivel</th>
                             <th>Correo</th>
+                            <th>Acción</th>
                         </thead>
                         <tbody>
                             <tr v-for="alumno in alumnos" v-bind:key="alumno._id">
@@ -98,6 +101,11 @@
                                 <td>{{ alumno.area }}</td>
                                 <td>{{ alumno.nivel }}</td>
                                 <td>{{ alumno.correo }}</td>
+                                <td class="center">
+                                <router-link :to="'/administracion/alumno/' + alumno._id" class="btn-flat btn-small waves-effect">
+                                    <i class="material-icons">remove_red_eye</i>
+                                </router-link>
+                            </td>
                             </tr>
                         </tbody>
                     </table>
@@ -116,10 +124,11 @@ import router from "../../router/index"
 import { api_url, store } from "../../main"
 import M from 'materialize-css'
 import Pagination from '../../components/Pagination.vue'
+import Preloader from '../../components/Preloader.vue'
 
 export default {
     components:{
-        Pagination
+        Pagination, Preloader,
     },
     mounted(){
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
@@ -134,6 +143,7 @@ export default {
             this.uname = store.state.user.name
         },
         async obtenerListadoAlumnos(){
+            this.isLoading = true
             const page = this.$route.query.page != undefined ? this.$route.query.page : 1
             await fetch(api_url + '/administracion/alumnos/?tipo=alumnos&page=' + page, {
                 method: 'GET',
@@ -147,7 +157,7 @@ export default {
                         if(response.msg != "" && response.msg != undefined){
                             store.commit('logout')
                         } else {
-                            M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
+                            M.toast({ html: response.message, classes: 'red darken-2' })
                             return false
                         }
                     }
@@ -157,6 +167,7 @@ export default {
                 }).finally(() => {
                     var selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
+                    this.isLoading = false
                 })
             })
         },
@@ -172,7 +183,8 @@ export default {
                 matricula: ''
             },
             catalogos: [],
-            maxPage: 1
+            maxPage: 1,
+            isLoading: false
         }
     }
 }

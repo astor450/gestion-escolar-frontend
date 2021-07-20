@@ -20,10 +20,10 @@ const routes = [
       import(/* webpackChunkName: "HomeAspirante" */ "../Aspirante/Index.vue"),
   },
   {
-    path: "/administracion/alumnos",
-    name: "AdmonAlumnos",
+    path: "/administracion/alumno/:id",
+    name: "VistaAlumno",
     component: () =>
-      import(/* webpackChunkName: "AlumnosAdministracion" */ "../Administracion/Alumnos/Index.vue")
+      import(/* webpackChunkName: "VistaAlumno" */ "../Administracion/Alumnos/Alumno.vue")
   },
   {
     path: "/administracion/login",

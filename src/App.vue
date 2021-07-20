@@ -122,7 +122,7 @@ export default {
   text-align: center!important;
 }
 body, html, #app{
-  background-color: #f5f5f5;
+  background-color: #f0f0f0 !important;
 }
 .container{
   background-color: #ffffff;
