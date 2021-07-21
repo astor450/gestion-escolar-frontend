@@ -21,6 +21,7 @@
             <div class="col s12 m12 center">
                 <table class="striped responsive-table highlight">
                     <thead>
+                        <th>Semestre</th>
                         <th>Nombre</th>
                         <th>Nivel Escolar</th>
                         <th>Tipo</th>
@@ -30,10 +31,11 @@
                     </thead>
                     <tbody>
                         <tr v-for="asignatura in asignaturas" v-bind:key="asignatura._id">
+                            <td>{{ asignatura.semestre.nombre }}</td>
                             <td>{{ asignatura.nombre }}</td>
                             <td>{{ asignatura.nivel }}</td>
                             <td>{{ asignatura.tipo }}</td>
-                            <td>{{ asignatura.docente_asignado }}</td>
+                            <td>{{ (asignatura.docente_asignado != undefined) ? asignatura.docente_asignado.nivel.toUpperCase() + " " + asignatura.docente_asignado.nombre.toUpperCase() + " " + asignatura.docente_asignado.primer_apellido.toUpperCase() + " " + asignatura.docente_asignado.segundo_apellido.toUpperCase() : "" }}</td>
                             <td>{{ asignatura.observaciones }}</td>
                             <td class="center">
                                 <router-link :to="'/administracion/asignaturas/' + asignatura._id" class="btn-flat btn-small waves-effect">

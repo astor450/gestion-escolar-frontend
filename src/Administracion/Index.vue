@@ -148,6 +148,25 @@
                     </div>
                 </div>
             </div>
+            <div class="col l4 m2 s12">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div class="card blue-colegio darken-1 sticky-action unselectable">
+                            <div class="card-content white-text text-center">
+                                <span class="material-icons" style="font-size: 48px">school</span>
+                                <span class="card-title">
+                                    {{ cantidad_docentes }} Docentes
+                                </span>
+                            </div>
+                            <div class="card-action">
+                                <router-link style="color:white;" to="/administracion/docentes" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
+                                &nbsp;
+                                <router-link style="color:white;" to="/administracion/nuevo-docente" class="waves-effect btn-flat waves-light"><i class="material-icons left">person_add</i>Nuevo</router-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -198,6 +217,7 @@ export default {
                     this.numero_asignaturas = response.cantidad_asignaturas
                     this.numero_programas = response.cantidad_programas
                     this.cantidad_periodos = response.cantidad_periodos
+                    this.cantidad_docentes = response.cantidad_docentes
                     
                 })
             }).finally(() => {
@@ -214,7 +234,8 @@ export default {
             isLoading: false,
             numero_areas: 0,
             numero_programas: 0,
-            cantidad_periodos: 0
+            cantidad_periodos: 0,
+            cantidad_docentes: 0,
         }
     }
 }

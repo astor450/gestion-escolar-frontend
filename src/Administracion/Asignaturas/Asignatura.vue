@@ -50,8 +50,8 @@
                     <div class="col s12 m5 input-field">
                         <select title="asd" id="docente" ref="docente" v-model="asignatura.docente_asignado">
                             <option value=""></option>
-                            <option v-for="semestre in catalogos.semestres" v-bind:key="semestre">
-                                {{ semestre }}
+                            <option v-for="docente in catalogos.docentes" v-bind:key="docente._id" v-bind:value="docente">
+                                {{ docente.nivel.toUpperCase() }} {{ docente.nombre.toUpperCase() }} {{ docente.primer_apellido.toUpperCase() }} {{ docente.segundo_apellido.toUpperCase() }}
                             </option>
                         </select>
                         <label for="docente">Docente Asignado</label>
@@ -142,9 +142,11 @@ export default {
                     }
                     this.catalogos.programas = response.catalogos.programas
                     this.catalogos.semestres = response.catalogos.periodos
+                    this.catalogos.docentes = response.catalogos.docentes
                 }).finally(() => {
                     var selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
+                    M.updateTextFields()
                 })
             }).finally(() => { this.isLoading= false })
         },
@@ -178,7 +180,8 @@ export default {
     },
     data(){
         return {
-            asignatura: {},
+            asignatura: {
+            },
             catalogos:{
                 niveles: [
                     'LICENCIATURA', 'MAESTRÍA', 'DOCTORADO'
@@ -187,7 +190,8 @@ export default {
                     'Asignatura', 'Seminario'
                 ],
                 programas: [],
-                semestres: []
+                semestres: [],
+                docentes: []
             },
             isLoading: false
         }

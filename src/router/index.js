@@ -144,6 +144,18 @@ const routes = [
     name:"ListaPermisos",
     component: () =>
       import(/* webpackChunkName: "ListadoPermisos" */ "../Administracion/Permisos/Index.vue")
+  },
+  {
+    path: "/administracion/docentes",
+    name:"ListaDocentes",
+    component: () =>
+      import(/* webpackChunkName: "ListadoDocentes" */ "../Administracion/Docentes/Index.vue")
+  },
+  {
+    path: "/administracion/docente/:id",
+    name:"VistaDocente",
+    component: () =>
+      import(/* webpackChunkName: "VistaDocente" */ "../Administracion/Docentes/Docente.vue")
   }
 ];
 

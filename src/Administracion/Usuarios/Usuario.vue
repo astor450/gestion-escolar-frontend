@@ -249,6 +249,7 @@ export default {
                 setTimeout(() =>{
                     let selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
+                    M.updateTextFields()
                 }, 200)
             })
         },

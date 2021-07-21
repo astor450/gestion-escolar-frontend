@@ -105,7 +105,7 @@ export default({
                         }
                     }
                     this.periodo = response.periodo
-                })
+                }).finally(() => M.updateTextFields())
             }).finally(() => {
                 this.isLoading = false
             })

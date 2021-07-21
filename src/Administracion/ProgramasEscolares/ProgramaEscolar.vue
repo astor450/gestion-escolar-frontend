@@ -85,17 +85,19 @@
                 <div class="row">
                     <h6 class="center">Asignaturas y Seminarios</h6>
                 </div>
-                <div class="row" style="max-height:30rem !important; overflow-y:scroll;">
+                <div class="row scrollbar" style="max-height:30rem !important; overflow-y:scroll;">
                     <ul class="collapsible" style="margin-left:2em; margin-right:2em;">
-                        <li draggable v-for="asignatura in programa.asignaturas" v-bind:key="asignatura._id" style="user-select:none;" :ref="asignatura._id">
+                        <li v-for="asignatura in programa.asignaturas" v-bind:key="asignatura._id" style="user-select:none;" :ref="asignatura._id">
                             <div class="collapsible-header">
-                                {{ asignatura.nombre }} &nbsp;
-                                <button @click.prevent="quitar(asignatura)" class="btn-floating orange darken-2 right btn-small tooltipped" :data-tooltip="'Quitar de ' + programa.nombre">
+                                {{ asignatura.nombre }} &nbsp;  <span class="red-text" v-if="asignatura.docente_asignado == undefined || asignatura.docente_asignado == ''" >Sin Docente Asignado</span>
+                                &nbsp; <button @click.prevent="quitar(asignatura)" class="btn-floating orange darken-2 right btn-small tooltipped" :data-tooltip="'Quitar de ' + programa.nombre">
                                     <i class="material-icons">arrow_forward</i>
                                 </button>
                             </div>
                             <div class="collapsible-body">
-                                <strong>Tipo: </strong>{{ asignatura.tipo }}
+                                <strong>Tipo: </strong>{{ asignatura.tipo }} <br/>
+                                <span v-if="asignatura.docente_asignado !== undefined"><strong>Docente: </strong>{{ asignatura.docente_asignado.nivel }} {{ asignatura.docente_asignado.nombre }} {{ asignatura.docente_asignado.primer_apellido }} {{ asignatura.docente_asignado.segundo_apellido }} </span>
+                                <strong>Semestre: </strong>{{ asignatura.semestre.nombre }} <br/>
                             </div>
                         </li>
                     </ul>
@@ -114,11 +116,13 @@
                                     <i class="material-icons">arrow_back</i>
                                 </button>
                                 <span class="right">
-                                    &nbsp; {{ asignatura.nombre }}
+                                    &nbsp; {{ asignatura.nombre }} &nbsp;  <span class="red-text" v-if="asignatura.docente_asignado == undefined || asignatura.docente_asignado == ''" >Sin Docente Asignado</span>
                                 </span>
                             </div>
                             <div class="collapsible-body">
-                                <strong>Tipo: </strong>{{ asignatura.tipo }}
+                                <strong>Tipo: </strong>{{ asignatura.tipo }} <br/>
+                                <span v-if="asignatura.docente_asignado !== undefined"><strong>Docente: </strong>{{ asignatura.docente_asignado.nivel }} {{ asignatura.docente_asignado.nombre }} {{ asignatura.docente_asignado.primer_apellido }} {{ asignatura.docente_asignado.segundo_apellido }} </span>
+                                <strong>Semestre: </strong>{{ asignatura.semestre.nombre }} <br/>
                             </div>
                         </li>
                     </ul>
@@ -230,6 +234,7 @@ export default({
                 setTimeout(() =>{
                     let selects = document.querySelectorAll('select')
                     M.FormSelect.init(selects, {})
+                    M.updateTextFields()
                 }, 200)
             })
         },
