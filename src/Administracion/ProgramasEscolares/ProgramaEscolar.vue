@@ -85,7 +85,7 @@
                 <div class="row">
                     <h6 class="center">Asignaturas y Seminarios</h6>
                 </div>
-                <div class="row scrollbar" style="max-height:30rem !important; overflow-y:scroll;">
+                <div class="row" style="max-height:30rem !important; overflow-y:scroll;">
                     <ul class="collapsible" style="margin-left:2em; margin-right:2em;">
                         <li v-for="asignatura in programa.asignaturas" v-bind:key="asignatura._id" style="user-select:none;" :ref="asignatura._id">
                             <div class="collapsible-header">
