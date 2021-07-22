@@ -2,7 +2,21 @@
     <div class="container z-depth-1 mt-3">
         <Preloader v-if="isLoading" />
         <div class="row">
-            <div class="col l4 m2 s12">
+            <div v-if="logged_in && request_finished" class="white-text center" style="padding:10px;" :class="{ ' teal darken-1': (periodo_actual.nombre != '' && periodo_actual.activo ), 'red darken-2': (periodo_actual.nombre == '' || !periodo_actual.activo) }">
+                <span style="margin-left:2em; margin-right:2em;" v-if="periodo_actual.nombre != '' && periodo_actual.activo">
+                    El periodo actual es: {{ periodo_actual.nombre }}, "{{ periodo_actual.descripcion }}"
+                </span>
+                <span style="margin-left:2em; margin-right:2em;" v-else-if="!periodo_actual.activo && periodo_actual.nombre != ''">
+                    El periodo {{ periodo_actual.nombre }} No se encuentra activo
+                    <a :href="'/administracion/periodo/' + periodo_actual._id" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Editar Periodo</a>
+                </span>
+                <span style="margin-left:2em; margin-right:2em;" v-else>
+                    No hay periodos configurados <a href="/administracion/agregar-periodo" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Agregar uno</a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col l4 m2 s12" v-if="$store.state.user.permisos.includes('alumnos.list') || $store.state.user.permisos.includes('alumnos.add')">
                 <div class="row">
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
@@ -13,17 +27,17 @@
                                 </span>
                             </div>
                             <div class="card-action">
-                                <router-link style="color:white;" to="/administracion/alumnos" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
+                                <router-link v-if="$store.state.user.permisos.includes('alumnos.list')" style="color:white;" to="/administracion/alumnos" class="waves-effect btn-flat waves-light"><i class="material-icons left">format_list_bulleted</i>Listado</router-link>
                                 &nbsp;
-                                <router-link style="color:white;" to="/administracion/nuevo-alumno" class="waves-effect btn-flat waves-light"><i class="material-icons left">person_add</i>Nuevo</router-link>
+                                <router-link v-if="$store.state.user.permisos.includes('alumnos.add')" style="color:white;" to="/administracion/nuevo-alumno" class="waves-effect btn-flat waves-light"><i class="material-icons left">person_add</i>Nuevo</router-link>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col l4 m2 s12">
+            <div class="col l4 m2 s12" v-if="$store.state.user.permisos.includes('user.list') || $store.state.user.permisos.includes('user.add')">
                 <div class="row">
-                    <div class="col s12 m12">
+                    <div class="col s12 m12" >
                         <div class="card blue-colegio darken-1 unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">person</span>
@@ -37,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col l4 m2 s12">
+            <div class="col l4 m2 s12" v-if="$store.state.user.permisos.includes('aspirante.list') || $store.state.user.permisos.includes('aspirante.add')">
                 <div class="row">
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1 unselectable">
@@ -53,9 +67,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col l4 m2 s12">
+            <div class="col l4 m2 s12" v-if="$store.state.user.permisos.includes('area.list') || $store.state.user.permisos.includes('area.add')">
                 <div class="row">
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
@@ -73,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col l4 m2 s12">
+            <div class="col l4 m2 s12" v-if="$store.state.user.permisos.includes('asignatura.list') || $store.state.user.permisos.includes('asignatura.add')">
                 <div class="row">
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
@@ -92,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col l4 m2 s12">
+            <div class="col l4 m2 s12" v-if="$store.state.user.permisos.includes('programa.list') || $store.state.user.permisos.includes('programa.add')">
                 <div class="row">
                     <div class="col s12 m12">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
@@ -113,7 +125,7 @@
             </div>
             <div class="col l4 m2 s12">
                 <div class="row">
-                    <div class="col s12 m12">
+                    <div class="col s12 m12" v-if="$store.state.user.permisos.includes('permisos.list') || $store.state.user.permisos.includes('permisos.add')">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">verified_user</span>
@@ -131,7 +143,7 @@
             </div>
             <div class="col l4 m2 s12">
                 <div class="row">
-                    <div class="col s12 m12">
+                    <div class="col s12 m12" v-if="$store.state.user.permisos.includes('periodo.list') || $store.state.user.permisos.includes('periodo.add')">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">av_timer</span>
@@ -150,7 +162,7 @@
             </div>
             <div class="col l4 m2 s12">
                 <div class="row">
-                    <div class="col s12 m12">
+                    <div class="col s12 m12" v-if="$store.state.user.permisos.includes('docentes.list') || $store.state.user.permisos.includes('docentes.add')">
                         <div class="card blue-colegio darken-1 sticky-action unselectable">
                             <div class="card-content white-text text-center">
                                 <span class="material-icons" style="font-size: 48px">school</span>
@@ -181,6 +193,10 @@ export default {
         this.logged_in = store.state.user.token != "" && localStorage.getItem('token') != null
         this.check_login()
         this.dashboardAdmin()
+
+        if(this.logged_in){
+            this.obtenerPeriodoActual()
+        }
     },
     components:{
         Preloader
@@ -223,6 +239,29 @@ export default {
             }).finally(() => {
                 this.isLoading = false
             })
+        },
+        async obtenerPeriodoActual(){
+            await fetch(api_url + '/administracion/periodos/actual', {
+                method: 'GET',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + store.state.user.token
+                }
+            }).then((request) => {
+                request.json().then((response) => {
+                if(response.status != 'success'){
+                    if(response.msg != "" && response.msg != undefined){
+                    store.commit('logout')
+                    } else {
+                    M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
+                    return false
+                    }
+                }
+                if(response.periodo != undefined && response.periodo.nombre != undefined){
+                    this.periodo_actual = response.periodo
+                }
+                })
+            }).finally(() => {this.request_finished=true;})
         }
     },
     data(){
@@ -236,8 +275,15 @@ export default {
             numero_programas: 0,
             cantidad_periodos: 0,
             cantidad_docentes: 0,
+            periodo_actual: {
+                nombre: '',
+                inicio: '',
+                cierre: '',
+                descripcion: '',
+                activo: false
+            }
         }
-    }
+    },
 }
 </script>
 

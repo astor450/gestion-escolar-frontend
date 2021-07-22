@@ -80,7 +80,7 @@
                                 <td>{{ usuario.tipo.nombre }}</td>
                                 <td>{{ usuario.area.nombre }}</td>
                                 <td>
-                                    <router-link :to="'/administracion/usuarios/' + usuario._id" class="btn-flat waves-effect">
+                                    <router-link v-if="$store.state.user.permisos.includes('user.view')" :to="'/administracion/usuarios/' + usuario._id" class="btn-flat waves-effect">
                                         <i class="material-icons">edit</i>
                                     </router-link>
                                 </td>

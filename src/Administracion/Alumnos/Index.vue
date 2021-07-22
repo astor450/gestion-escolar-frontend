@@ -102,7 +102,7 @@
                                 <td>{{ alumno.nivel }}</td>
                                 <td>{{ alumno.correo }}</td>
                                 <td class="center">
-                                <router-link :to="'/administracion/alumno/' + alumno._id" class="btn-flat btn-small waves-effect">
+                                <router-link v-if="$store.state.user.permisos.includes('alumnos.view')" :to="'/administracion/alumno/' + alumno._id" class="btn-flat btn-small waves-effect">
                                     <i class="material-icons">remove_red_eye</i>
                                 </router-link>
                             </td>

@@ -7,8 +7,8 @@
       <ul v-show="logged_in" class="right">
         <li>
           <a class="dropdown-trigger" style="background-color: #64646C; !important" href="#!" ref="sessionButton" data-target="dropdown1">
-            <img class="left mt-2" :src="foto == '' ? require('@/assets/user_placeholder.png') : foto" style="height:40px;"/> &nbsp;
-            {{ uname }} <i class="material-icons right">arrow_drop_down</i>
+            <img class="left mt-2" :src="foto == '' ? require('@/assets/user_placeholder.png') : $store.state.user.foto" style="height:40px;"/> &nbsp;
+            {{ $store.state.user.name }} <i class="material-icons right">arrow_drop_down</i>
           </a>
         </li>
       </ul>
@@ -18,23 +18,11 @@
     </div>
   </nav>
   <router-view />
-  <footer v-if="logged_in && request_finished" class="page-footer" :class="{ ' teal darken-1': (periodo_actual.nombre != '' && periodo_actual.activo ), 'red darken-2': (periodo_actual.nombre == '' || !periodo_actual.activo) }">
-      <span style="margin-left:2em; margin-right:2em;" v-if="periodo_actual.nombre != '' && periodo_actual.activo">
-        El periodo actual es: {{ periodo_actual.nombre }}, "{{ periodo_actual.descripcion }}" que comprende desde: {{ periodo_actual.inicio }} hasta: {{ periodo_actual.cierre }}
-      </span>
-      <span style="margin-left:2em; margin-right:2em;" v-else-if="!periodo_actual.activo && periodo_actual.nombre != ''">
-        El periodo {{ periodo_actual.nombre }} No se encuentra activo
-        <a :href="'/administracion/periodo/' + periodo_actual._id" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Editar Periodo</a>
-      </span>
-      <span style="margin-left:2em; margin-right:2em;" v-else>
-        No hay periodos configurados <a href="/administracion/agregar-periodo" style="margin-left:2em; margin-top:-0.4em;" class="btn-small waves-effect btn-flat white">Agregar uno</a>
-      </span>
-  </footer>
 </template>
 
 <script>
 import M from "materialize-css"
-import {store, api_url} from "./main"
+import { store } from "./main"
 export default {
   name: "App",
   mounted () {
@@ -44,11 +32,6 @@ export default {
     M.AutoInit()
     var tooltips = document.querySelectorAll('.tooltipped')
     M.Tooltip.init(tooltips, { position: 'bottom' } )
-
-    if(this.logged_in){
-      this.obtenerPeriodoActual()
-    }
-    
   },
   methods: {
     islogged(){
@@ -60,43 +43,12 @@ export default {
     cerrarSesion(){
       store.commit('logout')
     },
-    async obtenerPeriodoActual(){
-      await fetch(api_url + '/administracion/periodos/actual', {
-        method: 'GET',
-        headers:{
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + store.state.user.token
-        }
-      }).then((request) => {
-        request.json().then((response) => {
-          if(response.status != 'success'){
-            if(response.msg != "" && response.msg != undefined){
-              store.commit('logout')
-            } else {
-              M.toast({ html: 'Error al obtener la información del servidor', classes: 'red darken-2' })
-              return false
-            }
-          }
-          if(response.periodo != undefined && response.periodo.nombre != undefined){
-            this.periodo_actual = response.periodo
-          }
-        })
-      }).finally(() => {this.request_finished=true;})
-    }
+    
   },
   data(){
     return {
-      logged_in: false,
+      logged_in: store.state.user !== "" || store.state.user !== undefined,
       request_finished: false,
-      uname: store.state.user.name,
-      foto: store.state.user.foto,
-      periodo_actual: {
-        nombre: '',
-        inicio: '',
-        cierre: '',
-        descripcion: '',
-        activo: false
-      }
     }
   }
 };
@@ -113,7 +65,7 @@ export default {
   background-color: #64646C !important;
 }
 .gray-colegio{
-  background-color: #83848A !important;
+  background-color: #9395a0 !important;
 }
 .dark-colegio{
   background-color: #060606 !important;
@@ -165,11 +117,17 @@ body::-webkit-scrollbar {
 body::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #048FD4 !important; 
+  background-color: #9395a0 !important; 
 }
 body::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-color: #F5F5F5;
   border-radius: 10px; 
+}
+.borders-7{
+  border-radius:7px !important;
+}
+.text-mutted {
+  color: #888888 !important;
 }
 </style>

@@ -68,6 +68,7 @@ export default {
                 uid: response.uid,
                 uname: response.uname,
                 foto: response.foto,
+                permisos: JSON.stringify(response.permisos),
               }
               store.commit('setAdminInfo', administrativo)
               if(store.state.user.token != ""){
