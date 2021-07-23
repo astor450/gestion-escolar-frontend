@@ -85,18 +85,28 @@ body, html, #app{
 }
 .mt-1{
     margin-top: 0.25em !important;
+}.mt-n1{
+    margin-top: -0.25em !important;
 }
 .mt-2{
     margin-top: 0.5em !important;
+}.mt-n2{
+    margin-top: -0.5em !important;
 }
 .mt-3{
     margin-top: 1em !important;
+}.mt-n3{
+    margin-top: -1em !important;
 }
 .mt-4{
     margin-top: 1.5em !important;
+}.mt-n4{
+    margin-top: -1.5em !important;
 }
 .mt-5{
     margin-top: 2em !important;
+}.mt-n5{
+    margin-top: -2em !important;
 }
 .page-footer{
   position: fixed;
@@ -128,6 +138,6 @@ body::-webkit-scrollbar-track {
   border-radius:7px !important;
 }
 .text-mutted {
-  color: #888888 !important;
+  opacity: 0.7 !important;
 }
 </style>
